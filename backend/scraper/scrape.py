@@ -16,42 +16,6 @@ def save_req(r, filename):
             handle.write(block)
 
 COURSE_KEYS = ['UID', 'id', 'instructorId', 'termId', 'schoolCode', 'number', 'section', 'type']
-def get_courses_page(n):
-    query = {
-        'excludeTA': 'false',
-        'page': str(n),
-        'rpp': 450,
-        'schoolCodes': 'CS',
-        'termId': 87
-    }
-    url = 'https://www.applyweb.com/eval/new/reportbrowser/evaluatedCourses'
-    r = requests.get(url, cookies=cookies, headers=headers, params=query)
-    course_info = r.json()['data']
-    for course in course_info:
-        course['UID'] = '%i-%i-%i'%(course['id'], course['instructorId'], course['termId'])
-    course_info = [{key: course[key] for key in COURSE_KEYS} for course in course_info]
-    print(len(course_info))
-    return course_info
-
-def get_all_courses():
-    courses = []
-    page_num = 1
-    while True:
-        print("scraping page ", page_num)
-        page = get_courses_page(page_num)
-        courses.extend(page)
-        if not page:
-            break
-        page_num += 1
-        time.sleep(1)
-
-    with open('sample_data/F18CS_courses.csv', 'w') as outfile:
-        writer = csv.DictWriter(outfile, fieldnames=COURSE_KEYS)
-        writer.writeheader()
-        for course in courses:
-            writer.writerow(course)
-    with open('sample_data/F18CS_courses.json', 'w') as outfile:
-        json.dump(courses, outfile)
 
 
 # PROBABLY NOT NEEDED
