@@ -1,0 +1,6 @@
+*.log
+backend/__pycache__
+backend/ratings
+backend/comments
+/.vscode
+*.env
