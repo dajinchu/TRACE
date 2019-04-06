@@ -1,0 +1,13 @@
+{
+  "name": "TRACE",
+  "version": 2,
+  "builds": [
+    {"src": "/backend/api/**/*.js", "use": "@now/node"}
+  ],
+  "routes": [
+    {
+      "src": "/backend/api/(.*)",
+      "dest": "/backend/api/$1"
+    }
+  ]
+}
