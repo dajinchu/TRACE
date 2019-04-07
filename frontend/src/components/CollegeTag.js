@@ -1,12 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-
-
 const CollegeBox = styled.div`
-    margin-left: 9px;
-    margin-top: -5px;
-    grid-column: 1/3;
     width: 45px;
     height: 17.17px;
     background: #E50000;

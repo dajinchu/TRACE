@@ -1,6 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import CourseItem from './CourseItem'
+import React, { useState, useEffect, useRef } from 'react';
+import styled  from 'styled-components';
+import FontAwesome from 'react-fontawesome';
+import 'font-awesome/css/font-awesome.min.css';
+
+import CourseItem from './CourseItem';
+import ProfessorItem from './ProfessorItem';
 
 export const BACKEND_BASE_URL = 'https://trace.dajinchu.now.sh/backend/api';
 export const SEARCH_ITEM_TYPES = {
@@ -18,22 +22,39 @@ const Title = styled.h1`
   font-size: 64px;
   letter-spacing: .1em;
   text-transform: uppercase;
-  padding: 65px 14%;
+  padding: 65px 14% 30px;
   line-height: normal;
   color: #fff;
 `;
 
+const SearchBarContainer = styled.div`
+  margin: 20px 14%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`;
+
 const SearchBar = styled.input`
-  
+  border: none;
+  background-color: ${props => props.visible ? '#C1423E' : '#B12E2A'};
+  color: #fff;
+  font-size: 2em;
+  padding: .25em;
+  border-radius: 5px;
 `;
 
 const SearchItemsContainer = styled.div`
-  margin: 50px 20%;
+  margin: 50px 14%;
+  > * {
+    margin-bottom: 15px;
+  }
 `;
 
 const SearchPage = (props) => {
   const [query, setQuery] = useState('');
-  const [searchItems, setSearchItems] = useState([])
+  const [isSearchVisible, setIsSearchVisible] = useState(false);
+  const [searchItems, setSearchItems] = useState([]);
+
 
   useEffect(() => {
     fetch(
@@ -43,32 +64,72 @@ const SearchPage = (props) => {
         setSearchItems(data);
       });
     }).catch(error => console.error(error));
-    
+
     console.log(searchItems)
   }, [query]);
+
+
+  const searchInput = useRef(null);
+
+
+  const handleInitiateSearch = () => {
+    setIsSearchVisible(true);
+    let interval = setInterval(() => {
+      if (searchInput.current != null) {
+        searchInput.current.focus()
+        clearInterval(interval)
+      }
+    }, 100)
+  };
 
   return (
     <SearchPageContainer>
       <Title>
-        SEARCH<br/>TRACE.
+        SEARCH<br />TRACE.
       </Title>
-      <SearchBar
-        type="text"
-        value={query}
-        onChange={e => setQuery(e.target.value)}
-      />
+      <SearchBarContainer>
+        <FontAwesome
+          name='search'
+          size="3x"
+          style={{
+            color: '#FFFFFF',
+            cursor: 'pointer',
+            padding: '10px'
+          }}
+          onClick={handleInitiateSearch}
+        />
+        {isSearchVisible &&
+          <SearchBar
+            type="text"
+            ref={searchInput}
+            value={query}
+            visible={isSearchVisible}
+            onBlur={() => setIsSearchVisible(false)}
+            onChange={e => setQuery(e.target.value)}
+          />
+        }
+
+      </SearchBarContainer>
       <SearchItemsContainer>
         {searchItems.map(searchItem => {
           if (searchItem.type === SEARCH_ITEM_TYPES.PROF) {
-            return null; // PROFITEM
+            return (
+              <ProfessorItem
+                key={searchItem.id}
+                name={searchItem.name}
+                email='blerner@ccs.neu.edu'
+                homepage='ccs.neu.edu/home/blerner'
+              />
+            );
           } else if (searchItem.type === SEARCH_ITEM_TYPES.COURSE) {
             return (
-              <CourseItem 
+              <CourseItem
+                key={searchItem.id}
                 name={searchItem.name}
                 code={searchItem.code}
                 professors={searchItem.profs}
               />
-            ); // COURSEITEM
+            );
           } else {
             console.error(`Unrecognized search item type "${searchItem.type}".`)
             return null;
