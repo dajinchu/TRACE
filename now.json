@@ -3,10 +3,12 @@
   "version": 2,
   "builds": [
     {"src": "/backend/api/**/*.js", "use": "@now/node"},
-    {"src": "frontend/package.json", "use": "@now/static-build", "config": {"distDir": "build"}}
+    {"src": "/frontend/package.json", "use": "@now/static-build", "config": {"distDir": "build"}}
   ],
   "routes": [
-    {"src": "/static/(.*)", "headers": {"cache-control": "s-maxage=31536000,immutable"}, "dest": "/frontend/static/$1"},
-    {"src": "/backend/api/(.*)", "dest": "/backend/api/$1" }
+    {"src": "^/static/(.*)", "dest": "/frontend/static/$1"},
+    { "src": "/manifest.json", "dest": "/frontend/manifest.json" },
+    {"src": "/backend/api/(.*)", "dest": "/backend/api/$1" },
+    {"src": "/.*", "dest": "/frontend/index.html"}
   ]
 }
