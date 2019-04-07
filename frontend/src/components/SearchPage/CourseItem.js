@@ -1,5 +1,12 @@
 import React from 'react';
+import FA from 'react-fontawesome';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
+
+const StyledLink = styled(Link)`
+  text-decoration: none;
+  margin-bottom: 15px;
+`;
 
 const CourseContainer = styled.div`
   padding: 20px 30px;
@@ -129,35 +136,37 @@ const CourseMetricSubtext = styled.div`
   letter-spacing: .1em;
 `;
 
-const CourseItem = ({ name, code, professors, metrics }) => {
+const CourseItem = ({ name, code, professors, metrics, key }) => {
   metrics = {average: 4.2, workload: 16}
   return (
     <CourseContainer>
-      <Column>
-        <Header>
-          <ItemType>
-            COURSE
-          </ItemType>
-          <HeaderLine />
-        </Header>
-
-        <CourseTitle>
-          {name}
-        </CourseTitle>
-        <CourseCode>
-          {code}
-        </CourseCode>
-        <CourseMetrics>
-          <CourseMetric>
-            {metrics.average}<br/>
-            <CourseMetricSubtext>AVERAGE</CourseMetricSubtext>
-          </CourseMetric>
-          <CourseMetric>
-            {metrics.workload}h
-            <CourseMetricSubtext>WORKLOAD</CourseMetricSubtext>
-          </CourseMetric>
-        </CourseMetrics>
-      </Column>
+        <Column>
+      <StyledLink to={`course/${key}`}>
+          <Header>
+            <ItemType>
+              COURSE
+            </ItemType>
+            <HeaderLine />
+          </Header>
+          <CourseTitle>
+            {name}
+            <FA name="external-link-alt" />
+          </CourseTitle>
+          <CourseCode>
+            {code}
+          </CourseCode>
+          <CourseMetrics>
+            <CourseMetric>
+              {metrics.average}<br/>
+              <CourseMetricSubtext>AVERAGE</CourseMetricSubtext>
+            </CourseMetric>
+            <CourseMetric>
+              {metrics.workload}h
+              <CourseMetricSubtext>WORKLOAD</CourseMetricSubtext>
+            </CourseMetric>
+          </CourseMetrics>
+      </StyledLink>
+        </Column>
       <ProfessorRatings>
         <InnerProfRatings>
           <ProfessorTable>

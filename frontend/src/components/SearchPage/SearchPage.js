@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled  from 'styled-components';
 import FontAwesome from 'react-fontawesome';
-import 'font-awesome/css/font-awesome.min.css';
 
 import CourseItem from './CourseItem';
 import ProfessorItem from './ProfessorItem';
@@ -11,6 +10,8 @@ export const SEARCH_ITEM_TYPES = {
   PROF: 'prof',
   COURSE: 'course',
 }
+
+
 
 const SearchPageContainer = styled.div`
 `;
@@ -80,9 +81,9 @@ const SearchPage = (props) => {
 
   return (
     <SearchPageContainer>
-      <Title>
-        SEARCH<br />TRACE.
-      </Title>
+        <Title>
+          SEARCH<br />TRACE.
+        </Title>
       <SearchBarContainer>
         <FontAwesome
           name='search'
@@ -113,8 +114,8 @@ const SearchPage = (props) => {
               <ProfessorItem
                 key={searchItem.id}
                 name={searchItem.name}
-                email='blerner@ccs.neu.edu'
-                homepage='ccs.neu.edu/home/blerner'
+                email='matthias@ccs.neu.edu'
+                homepage='ccs.neu.edu/home/matthias'
                 metrics={searchItem.metrics}
               />
             );
@@ -124,7 +125,7 @@ const SearchPage = (props) => {
                 key={searchItem.id}
                 name={searchItem.name}
                 code={searchItem.code}
-                professors={searchItem.metrics}
+                professors={searchItem.profs}
               />
             );
           } else {

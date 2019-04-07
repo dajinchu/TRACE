@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 import Professor from './Professor'
 import { BACKEND_BASE_URL } from '../SearchPage/SearchPage'
@@ -12,9 +13,14 @@ const NavHeader = styled.div`
   background-color: #B12E2A;
 `;
 
+const StyledLink = styled(Link)`
+  text-decoration: none;
+`;
+
 const HeaderText = styled.span`
   font-size: 20px;
   font-weight: 500;
+  text-decoration: none;
   color: #fff;
   letter-spacing: .1em;
 `;
@@ -66,7 +72,7 @@ const CoursePage = ({ UID }) => {
   return (
     <CoursePageContainer>
       <NavHeader>
-        <HeaderText>SEARCH<br />TRACE.</HeaderText>
+        <StyledLink to="/"><HeaderText>SEARCH<br />TRACE.</HeaderText></StyledLink>
       </NavHeader>
       <Header>
         <Title>
