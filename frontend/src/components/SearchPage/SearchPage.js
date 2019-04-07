@@ -115,7 +115,7 @@ const SearchPage = (props) => {
                 name={searchItem.name}
                 email='blerner@ccs.neu.edu'
                 homepage='ccs.neu.edu/home/blerner'
-                metrics={searchItem.avg}
+                metrics={searchItem.metrics}
               />
             );
           } else if (searchItem.type === SEARCH_ITEM_TYPES.COURSE) {
@@ -124,7 +124,7 @@ const SearchPage = (props) => {
                 key={searchItem.id}
                 name={searchItem.name}
                 code={searchItem.code}
-                professors={searchItem.profs}
+                professors={searchItem.metrics}
               />
             );
           } else {

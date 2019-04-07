@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import SearchPage from './components/SearchPage';
+import SearchPage from './components/SearchPage/SearchPage';
+import CoursePage from './components/CoursePage/CoursePage';
 import * as serviceWorker from './serviceWorker';
 import GlobalStyle, { CSSReset } from './GlobalStyle'
 
@@ -10,7 +11,8 @@ const App = () => {
     <>
       <CSSReset />
       <GlobalStyle />
-      <SearchPage />
+      {/* <SearchPage /> */}
+      <CoursePage UID='CS3500' />
     </>
   );
 }
