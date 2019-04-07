@@ -110,7 +110,6 @@ const TableHead = styled.th`
 `;
 
 const TableDetail = styled.td`
-  color: ${(props) => (props.value > 0) ? '#368D20' : (props.value < 0) ? "#8D2720" : "black"};
   text-align: center;
   min-height: 40px;
 `;
@@ -137,7 +136,7 @@ const CourseMetricSubtext = styled.div`
   letter-spacing: .1em;
 `;
 
-const CourseItem = ({ name, code, professors, metrics, key }) => {
+const CourseItem = ({ name, code, professors, metrics, UID }) => {
   let newProfessors = professors.map((prof) => ({
     metrics: Object.entries(prof.metrics).map(metric => {
       let newMetric = metric[1];
@@ -149,7 +148,7 @@ const CourseItem = ({ name, code, professors, metrics, key }) => {
   return (
     <CourseContainer>
         <Column>
-      <StyledLink to={`course/${key}`}>
+      <StyledLink to={`course/:${UID}`}>
           <Header>
             <ItemType>
               COURSE

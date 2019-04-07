@@ -99,14 +99,14 @@ const ProfessorItem = ({ name, email, homepage, metrics }) => {
         <Header>
           <TitleText>
             PROFESSOR
-        </TitleText>
+          </TitleText>
           <HeaderLine />
         </Header>
         <ProfessorName>
           {name}
         </ProfessorName>
         <ProfessorInfo>
-          <a href={`mailto:${email}`}>
+          <a href={`mailto:${email || 'systems@ccs.neu.edu'}`}>
             <FontAwesome name='reply' style={{
               marginRight: '10px',
               color: '#A3874A',
@@ -115,7 +115,7 @@ const ProfessorItem = ({ name, email, homepage, metrics }) => {
           {email}
         </ProfessorInfo>
         <ProfessorInfo>
-          <a href={`${homepage}`}>
+          <a href={homepage || 'https://khoury.northeastern.edu'}>
             <FontAwesome name='globe' style={{
               marginRight: '10px',
               width: '14px',

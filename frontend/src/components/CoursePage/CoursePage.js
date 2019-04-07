@@ -55,11 +55,11 @@ const CoursesTable = styled.div`
   }
 `;
 
-const CoursePage = ({ UID }) => {
+const CoursePage = (props) => {
   const [data, setData] = useState({});
 
   useEffect(() => {
-    fetch(`${BACKEND_BASE_URL}/course`).then(response => {
+    fetch(`${BACKEND_BASE_URL}/course?id=${props.match.params.UID}`).then(response => {
       response.json().then(response => {
         setData(response);
       });
@@ -88,7 +88,7 @@ const CoursePage = ({ UID }) => {
             <Professor
               name={prof.name}
               key={prof.name}
-              metrics={prof.semesters[0].metrics}
+              metrics={prof.metrics}
             />
           );
         })}

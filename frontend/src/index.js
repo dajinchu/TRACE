@@ -15,7 +15,7 @@ const App = () => {
       <CSSReset />
       <GlobalStyle />
       <Route path="/" exact component={SearchPage} />
-      <Route path="/course/:id" exact component={CoursePage} />
+      <Route path="/course/:UID" exact component={CoursePage} />
     </Router>
   );
 }

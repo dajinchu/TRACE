@@ -49,6 +49,16 @@ const SearchItemsContainer = styled.div`
   }
 `;
 
+const Footer = styled.div`
+  color: #fff;
+  padding: 20px 14%;
+`;
+
+const GithubLink = styled.a`
+  text-decoration: none;
+  color: #fff;
+`;
+
 const SearchPage = () => {
   const [query, setQuery] = useState('');
   // const [isSearchVisible, setIsSearchVisible] = useState(false);
@@ -112,15 +122,14 @@ const SearchPage = () => {
               <ProfessorItem
                 key={searchItem.id}
                 name={searchItem.name}
-                email='matthias@ccs.neu.edu'
-                homepage='ccs.neu.edu/home/matthias'
                 metrics={searchItem.metrics}
               />
             );
           } else if (searchItem.type === SEARCH_ITEM_TYPES.COURSE) {
             return (
               <CourseItem
-                key={searchItem.id}
+                key={searchItem.UID}
+                UID={searchItem.UID}
                 name={searchItem.name}
                 code={searchItem.code}
                 professors={searchItem.profs}
@@ -133,6 +142,12 @@ const SearchPage = () => {
           }
         })}
       </SearchItemsContainer>
+      <Footer>
+        By <GithubLink href='github.com/dajinchu'>Da-Jin</GithubLink>,&nbsp;
+        <GithubLink href='github.com/ryandrew14'>Ryan</GithubLink>,&nbsp;
+        <GithubLink href='github.com/talusvyatsky'>Tal</GithubLink>, and&nbsp;
+        <GithubLink href='github.com/sauhardar'>Sauharda</GithubLink>.
+      </Footer>
     </SearchPageContainer>
   );
 };

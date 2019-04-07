@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { capitalize } from '../../utils/parsingUtils';
+import { capitalize, round } from '../../utils/parsingUtils';
 
 const ProfessorTitle = styled.h2`
   font-size: 28px;
@@ -38,7 +38,7 @@ const Professor = ({ name, metrics }) => {
         return (
           <Column key={metric[0] + metric[1]}>
             <div>{capitalize(metric[0])}</div>
-            <div>{metric[1]}</div>
+            <div>{round(metric[1], 2)}</div>
           </Column>
         );
       })}
