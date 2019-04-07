@@ -7,7 +7,8 @@ from dotenv import load_dotenv
 
 from login import login, auth_get
 
-COURSE_KEYS = ['UID', 'id', 'instructorId', 'termId', 'schoolCode', 'number', 'section', 'type', 'name']
+COURSE_KEYS = ['UID', 'id', 'instructorId', 'termId', 'schoolCode', 'number', 'section', 'type',
+               'name', 'instructorName' ]
 def get_courses_page(n, term):
     """https://www.applyweb.com/eval/new/reportbrowser/evaluatedCourses?excludeTA=false&page=1&rpp=15&termId=0"""
     query = {
@@ -22,6 +23,7 @@ def get_courses_page(n, term):
     course_info = r.json()['data']
     for course in course_info:
         course['UID'] = '%i-%i-%i'%(course['id'], course['instructorId'], course['termId'])
+        course['instructorName'] = course['instructorFirstName']+' '+course['instructorLastName']
     course_info = [{key: course[key] for key in COURSE_KEYS} for course in course_info]
     print(len(course_info))
     return course_info
