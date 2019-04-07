@@ -104,7 +104,7 @@ const ProfessorItem = ({ name, email, homepage, metrics }) => {
           {name}
         </ProfessorName>
         <ProfessorInfo>
-          <a href={`mailto:${email || 'systems@ccs.neu.edu'}`}>
+          <a href={/*`mailto:${email ||*/ `systems@ccs.neu.edu`}>
             <FontAwesome name='reply' style={{
               marginRight: '10px',
               color: '#A3874A',
@@ -113,7 +113,7 @@ const ProfessorItem = ({ name, email, homepage, metrics }) => {
           {email}
         </ProfessorInfo>
         <ProfessorInfo>
-          <a href={homepage || 'https://khoury.northeastern.edu'}>
+          <a href={/*homepage || */'https://khoury.northeastern.edu'}>
             <FontAwesome name='globe' style={{
               marginRight: '10px',
               width: '14px',
