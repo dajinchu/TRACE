@@ -67,6 +67,7 @@ const SearchPage = (props) => {
               <CourseItem 
                 name={searchItem.name}
                 code={searchItem.code}
+                professors={searchItem.profs}
               />
             ); // COURSEITEM
           } else {
