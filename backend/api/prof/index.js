@@ -15,6 +15,14 @@ app.get('*', (req, res) => {
         UID: 8129,
         code: "CS 3500",
         name: "Object Oriented Design",
+        metrics: {
+          "lecture": 4,
+          "workload": 20,
+          "personality":4,
+          "overall":4.5,
+          "challenge":4.4,
+          "learning":4.2
+        },
         semesters: [
           {
             UID: 87,
@@ -46,6 +54,14 @@ app.get('*', (req, res) => {
         UID: 2912,
         code: "CS 2500",
         name: "Fundamentals of Computer Science 1",
+        metrics: {
+          "lecture": 4,
+          "workload": 20,
+          "personality":4,
+          "overall":4.5,
+          "challenge":4.4,
+          "learning":4.2
+        },
         semesters: [
           {
             UID: 21,

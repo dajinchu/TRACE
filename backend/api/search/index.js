@@ -43,6 +43,7 @@ app.get('*', (req, res) => {
         type: "prof",
         name: "Matthias Felleisen",
         UID: "9201",
+        avg: {"lecture":4.46,"workload":17.75,"personality":4,"overall":4.56,"challenge":4.46,"learning":4.43},
       }
     ]);
   }
