@@ -2,24 +2,18 @@ from bs4 import BeautifulSoup
 import lxml
 
 def get_comments(html):
-    soup = BeautifulSoup(open(html), "lxml")
+    soup = BeautifulSoup(open(html, encoding="UTF-8"), "lxml")
 
-    answers = soup.select('.panel tbody')
     comments = {}
-    course_related = []
-    learning_related = []
-    instructor_related = []
+    course_related = soup.select('#cat_1 tbody a')
+    learning_related = soup.select('#cat_2 tbody a')
+    instructor_related = soup.select('#cat_3 tbody a')
+    course_related_comments = [comment.string for comment in course_related]
+    learning_related_comments = [comment.string for comment in learning_related]
+    instructor_related_comments = [comment.string for comment in instructor_related]
 
-    if answers:
-        instructor_related = []
-        for comment in answers[0].find_all('a', text=True):
-            course_related.append(comment.string)
-        for comment in answers[1].find_all('a', text=True):
-            learning_related.append(comment.string)
-        for comment in answers[2].find_all('a', text=True):
-            instructor_related.append(comment.string)
-    comments['course-related'] = course_related
-    comments['learning-related'] = learning_related
-    comments['instructor-related'] = instructor_related
+    comments['course-related'] = course_related_comments
+    comments['learning-related'] = learning_related_comments
+    comments['instructor-related'] = instructor_related_comments
 
     print(comments)
