@@ -13,6 +13,7 @@ app.get('*', (req, res) => {
     courses: [
       {
         UID: 8129,
+        code: "CS 3500",
         name: "Object Oriented Design",
         semesters: [
           {
@@ -43,6 +44,7 @@ app.get('*', (req, res) => {
       },
       {
         UID: 2912,
+        code: "CS 2500",
         name: "Fundamentals of Computer Science 1",
         semesters: [
           {

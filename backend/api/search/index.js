@@ -13,12 +13,13 @@ app.get('*', (req, res) => {
     res.json([
       {
         type: "course",
-        uid: "82910",
+        UID: "82910",
         code: "CS 3500",
         name: "Object Oriented Design",
         profs: [
           {
             name: "Ben Lerner",
+            UID: 81202,
             effectiveness: 5,
             personality: 5,
             challenge: 5,
@@ -28,6 +29,7 @@ app.get('*', (req, res) => {
           },
           {
             name: "Clark Freifeld",
+            UID: 981,
             effectiveness: 4,
             personality: 4,
             challenge: 4,
@@ -40,7 +42,7 @@ app.get('*', (req, res) => {
       {
         type: "prof",
         name: "Matthias Felleisen",
-        uid: "9201",
+        UID: "9201",
       }
     ]);
   }
