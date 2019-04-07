@@ -37,8 +37,6 @@ headers = {
     'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0'
 }
 def auth_get(*args, **kwargs):
-    print(args)
-    print(kwargs)
     global cookies
     r = requests.get(*args, **kwargs, cookies=cookies, headers=headers)
 
