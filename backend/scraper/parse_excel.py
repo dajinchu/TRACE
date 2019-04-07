@@ -137,53 +137,14 @@ def is_lecture(file):
     raise Exception("Course not found in courses.csv")
 
 
-
-#AGGREGATE FUNC
-def aggregate(outfile, aggregate_by, aggregate_column):
-    with open(outfile, 'w', newline='') as outfile:
-        writer = csv.writer(outfile)
-        prof_name = ""
-        agg_le, agg_w, agg_p, agg_o, agg_c, agg_lv, count = 0, 0, 0, 0, 0, 0, 0
-        for row in sort_by_prof():
-            if row[0] == prof_name:
-                agg_le = agg_le + float(row[2])
-                agg_w = agg_w + float(row[3])
-                agg_p = agg_p + float(row[4])
-                agg_o = agg_o + float(row[5])
-                agg_c = agg_c + float(row[6])
-                agg_lv = agg_lv + float(row[7])
-                count = count+1
-            else:
-                if count == 0:
-                    writer.writerow(
-                        ["Prof", "Course", "Lecture Effective", "Workload", "Personality", "Overall", "Challenge",
-                         "Learning Value"])
-                else:
-                    writer.writerow(
-                        [prof_name, row[1], agg_le / count, agg_w / count, agg_p / count, agg_o / count, agg_c / count,
-                         agg_lv / count])
-                prof_name = row[0]
-                agg_le = float(row[2])
-                agg_w = float(row[3])
-                agg_p = float(row[4])
-                agg_o = float(row[5])
-                agg_c = float(row[6])
-                agg_lv = float(row[7])
-                count = 1
-        writer.writerow(
-            [prof_name, row[1], agg_le / count, agg_w / count, agg_p / count, agg_o / count, agg_c / count,
-             agg_lv / count])
-
-
+METRICS = ["lecture", "workload", "personality", "overall", "challenge", "learning"]
 
 
 
 def prof_aggregate():
     with open("sample_data/sortedbyprof.csv", 'w', newline='') as outfile:
         writer = csv.writer(outfile)
-        writer.writerow(
-            ["Prof", "Lecture Effective", "Workload", "Personality", "Overall", "Challenge",
-             "Learning Value"])
+        writer.writerow(["prof"]+METRICS)
         sorted = sort_by_prof()
         prof_name = sorted[0][0]
         count = 0
@@ -204,9 +165,7 @@ def prof_aggregate():
 def course_aggregate():
     with open("sample_data/sortedbycourse.csv", 'w', newline='') as outfile:
         writer = csv.writer(outfile)
-        writer.writerow(
-            ["Course", "Lecture Effective", "Workload", "Personality", "Overall", "Challenge",
-             "Learning Value"])
+        writer.writerow(["code"]+METRICS)
         sorted = sort_by_course()
         course_name = sorted[0][1]
         count = 0
@@ -225,9 +184,7 @@ def course_aggregate():
 def course_prof_aggregate():
     with open("sample_data/sortedbycourse_prof.csv", 'w', newline='') as outfile:
         writer = csv.writer(outfile)
-        writer.writerow(
-            ["Prof", "Course", "Lecture Effective", "Workload", "Personality", "Overall", "Challenge",
-             "Learning Value"])
+        writer.writerow(["prof","code"]+METRICS)
         sorted = sort_by_prof_course()
         prof_course = sorted[0][0:2]
         count = 0
@@ -259,7 +216,7 @@ if __name__ == '__main__':
     ratings = []
     with open("./sample_data/ratings.csv", 'w', newline='') as outfile:
         writer = csv.writer(outfile)
-        writer.writerow(["Prof", "Course", "Lecture Effective", "Workload", "Personality", "Overall", "Challenge", "Learning Value"])
+        writer.writerow(["prof","code"]+METRICS)
         for filename in os.listdir(ratings_dir):
             if is_lecture(filename):
                 file = "./ratings/" + filename
@@ -269,5 +226,7 @@ if __name__ == '__main__':
                 writer.writerow([prof] + [course_name] + metrics)
                 ratings.append([prof] + [course_name] + metrics)
 
+    course_aggregate()
+    prof_aggregate()
     course_prof_aggregate()
 
