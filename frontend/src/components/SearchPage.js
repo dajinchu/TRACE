@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-
 import CourseItem from './CourseItem'
 
 export const BACKEND_BASE_URL = 'https://trace.dajinchu.now.sh/backend/api';

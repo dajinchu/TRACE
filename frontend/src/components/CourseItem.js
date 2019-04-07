@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import CollegeTag from './CollegeTag';
 
 const CourseContainer = styled.div`
   display: grid;
@@ -13,7 +14,7 @@ const CourseContainer = styled.div`
   background: #F6F6F6;
   box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.5);
   border-radius: 5px;
-`
+`;
 const ItemType = styled.div`
 margin: 10px;
 grid-row: 1;
@@ -25,7 +26,7 @@ font-size: 18px;
 line-height: normal;
 letter-spacing: 0.1em;
 color: #000000;
-`
+`;
 
 const Line = styled.div`
   margin-top: 1.2em;
@@ -37,7 +38,7 @@ const Line = styled.div`
   left: 326px;
   top: 663px;
   border: 0.2px solid #000000;
-`
+`;
 const CourseTitle = styled.div`
   grid-column: 1/3;
   grid-row: 1/2;
@@ -120,7 +121,7 @@ const TableDetail = styled.td`
   padding-right: 12px;
 `;
 
-const CourseItem = ({ name, code, professors }) => {
+const CourseItem = ({ name, code, professors, collegeTag }) => {
   
   return (
     <CourseContainer>
@@ -134,6 +135,9 @@ const CourseItem = ({ name, code, professors }) => {
       <CourseCode>
         {code}
       </CourseCode>
+      <CollegeTag>
+        {collegeTag}
+      </CollegeTag>
       <ProfessorRatings>
         <InnerProfRatings>
           <ProfessorTable>
