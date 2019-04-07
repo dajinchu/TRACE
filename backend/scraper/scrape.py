@@ -15,8 +15,6 @@ def save_req(r, filename):
         for block in r.iter_content(1024):
             handle.write(block)
 
-COURSE_KEYS = ['UID', 'id', 'instructorId', 'termId', 'schoolCode', 'number', 'section', 'type']
-
 
 # PROBABLY NOT NEEDED
 def get_instructor_report_html(courseinfo):

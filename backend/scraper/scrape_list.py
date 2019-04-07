@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 
 from login import login, auth_get
 
-COURSE_KEYS = ['UID', 'id', 'instructorId', 'termId', 'schoolCode', 'number', 'section', 'type']
+COURSE_KEYS = ['UID', 'id', 'instructorId', 'termId', 'schoolCode', 'number', 'section', 'type', 'name']
 def get_courses_page(n, term):
     """https://www.applyweb.com/eval/new/reportbrowser/evaluatedCourses?excludeTA=false&page=1&rpp=15&termId=0"""
     query = {
