@@ -43,7 +43,7 @@ def get_comments_by_class():
     comments_dir = './comments'
     comments = []
     already_written = []
-    with open("./sample_data/comments.csv", 'w') as outfile:
+    with open("./sample_data/comments.csv", 'w', newline='') as outfile:
         writer = csv.writer(outfile)
         writer.writerow(['code', 'UID', 'course-comment', 'learning-comment', 'instructor-related'])
         for filename in os.listdir(comments_dir):
