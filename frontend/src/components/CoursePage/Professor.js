@@ -1,8 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const capitalize = (word) => 
-  word.replace(/\b\w/g, l => l.toUpperCase());
+import { capitalize } from '../../utils/parsingUtils';
 
 const ProfessorTitle = styled.h2`
   font-size: 28px;
@@ -23,6 +22,7 @@ const Column = styled.div`
 
 const ProfessorContainer = styled.div`
   padding: 20px 30px;
+  box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.5);
   background: #F7F7F7;
   border-radius: 5px;
 `;

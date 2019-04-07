@@ -11,8 +11,6 @@ export const SEARCH_ITEM_TYPES = {
   COURSE: 'course',
 }
 
-
-
 const SearchPageContainer = styled.div`
 `;
 
@@ -51,7 +49,7 @@ const SearchItemsContainer = styled.div`
   }
 `;
 
-const SearchPage = (props) => {
+const SearchPage = () => {
   const [query, setQuery] = useState('');
   // const [isSearchVisible, setIsSearchVisible] = useState(false);
   const [searchItems, setSearchItems] = useState([]);
@@ -126,6 +124,7 @@ const SearchPage = (props) => {
                 name={searchItem.name}
                 code={searchItem.code}
                 professors={searchItem.profs}
+                metrics={searchItem.metrics}
               />
             );
           } else {
