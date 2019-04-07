@@ -13,8 +13,6 @@ export const SEARCH_ITEM_TYPES = {
 }
 
 const SearchPageContainer = styled.div`
-  background-color: #B12E2A;
-  height: 100vh;
 `;
 
 const Title = styled.h1`
@@ -36,11 +34,13 @@ const SearchBarContainer = styled.div`
 
 const SearchBar = styled.input`
   border: none;
-  background-color: ${props => props.visible ? '#C1423E' : '#B12E2A'};
+  /* background-color: ${props => props.visible ? '#C1423E' : '#B12E2A'}; */
+  background-color: #C1423E;
   color: #fff;
   font-size: 2em;
   padding: .25em;
   border-radius: 5px;
+  margin-left: 5px;
 `;
 
 const SearchItemsContainer = styled.div`
@@ -52,7 +52,7 @@ const SearchItemsContainer = styled.div`
 
 const SearchPage = (props) => {
   const [query, setQuery] = useState('');
-  const [isSearchVisible, setIsSearchVisible] = useState(false);
+  // const [isSearchVisible, setIsSearchVisible] = useState(false);
   const [searchItems, setSearchItems] = useState([]);
 
 
@@ -64,16 +64,12 @@ const SearchPage = (props) => {
         setSearchItems(data);
       });
     }).catch(error => console.error(error));
-
-    console.log(searchItems)
   }, [query]);
-
 
   const searchInput = useRef(null);
 
-
   const handleInitiateSearch = () => {
-    setIsSearchVisible(true);
+    // setIsSearchVisible(true);
     let interval = setInterval(() => {
       if (searchInput.current != null) {
         searchInput.current.focus()
@@ -98,16 +94,16 @@ const SearchPage = (props) => {
           }}
           onClick={handleInitiateSearch}
         />
-        {isSearchVisible &&
+        {/* {isSearchVisible && */}
           <SearchBar
             type="text"
             ref={searchInput}
             value={query}
-            visible={isSearchVisible}
-            onBlur={() => setIsSearchVisible(false)}
+            // visible={isSearchVisible}
+            // onBlur={() => setIsSearchVisible(false)}
             onChange={e => setQuery(e.target.value)}
           />
-        }
+        {/* } */}
 
       </SearchBarContainer>
       <SearchItemsContainer>
@@ -119,6 +115,7 @@ const SearchPage = (props) => {
                 name={searchItem.name}
                 email='blerner@ccs.neu.edu'
                 homepage='ccs.neu.edu/home/blerner'
+                metrics={searchItem.avg}
               />
             );
           } else if (searchItem.type === SEARCH_ITEM_TYPES.COURSE) {

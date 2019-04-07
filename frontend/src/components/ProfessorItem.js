@@ -3,14 +3,31 @@ import FontAwesome from 'react-fontawesome'
 import styled from 'styled-components';
 import 'font-awesome/css/font-awesome.min.css';
 
+const VALUE_OUT_OF = {
+  STANDARD: 5,
+  HOURS: 20,
+};
+
 const ProfessorItemContainer = styled.div`
   background-color: #F7F7F7;
   border-radius: 5px;
   padding: 20px 30px;
+  box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.5);
+  display: flex;
 `;
 
-const Column = styled.div`
-  max-width: 33%;
+const LeftColumn = styled.div`
+  width: 33%;
+`;
+
+const RightColumn = styled.div`
+  width: 67%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  > * {
+    margin-left: 30px;
+  }
 `;
 
 const Header = styled.h1`
@@ -42,10 +59,40 @@ const ProfessorName = styled.h2`
   margin-bottom: 20px;
 `;
 
+const CourseMetric = styled.div`
+  text-align: center;
+`;
+
+const CourseMetricSubtext = styled.div`
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: .1em;
+  color: #A3874A;
+  text-transform: uppercase;
+  margin-top: 10px;
+`;
+
+const Metric = ({name, value, valueOutOf}) => {
+  let percentOfCircumfrence = value / valueOutOf;
+  let circumfrence = 2 * 54 * 3.14 * (1 - percentOfCircumfrence);
+  return (
+    <CourseMetric>
+      <svg width="120" height="120" viewBox="0 0 120 120" style={{ transform: 'rotate(-90deg)' }}>
+        <circle cx="60" cy="60" r="54" fill="none" stroke="#E6E6E6" strokeWidth="10" />
+        <circle cx="60" cy="60" r="54" fill="none" stroke="#A3874A" strokeWidth="10"
+          strokeDasharray="339.292" strokeDashoffset={circumfrence} />
+      </svg>
+      <CourseMetricSubtext>{name}</CourseMetricSubtext>
+    </CourseMetric>
+  );
+};
+
 const ProfessorItem = ({ name, email, homepage, metrics }) => {
+  const displayMetrics = Object.entries(metrics).filter(m => 
+    m[0] === 'workload' || m[0] === 'overall' || m[0] === 'personality');
   return (
     <ProfessorItemContainer>
-      <Column>
+      <LeftColumn>
         <Header>
           <TitleText>
             PROFESSOR
@@ -60,7 +107,7 @@ const ProfessorItem = ({ name, email, homepage, metrics }) => {
             <FontAwesome name='reply' style={{
               marginRight: '10px',
               color: '#A3874A',
-            }}/>
+            }} />
           </a>
           {email}
         </ProfessorInfo>
@@ -70,11 +117,27 @@ const ProfessorItem = ({ name, email, homepage, metrics }) => {
               marginRight: '10px',
               width: '14px',
               color: '#A3874A',
-            }}/>
+            }} />
           </a>
           {homepage}
         </ProfessorInfo>
-      </Column>
+      </LeftColumn>
+      <RightColumn>
+        {displayMetrics.map(metric => {
+          const [name, value] = metric;
+          return (
+            <Metric
+              name={name}
+              key={name}
+              value={value}
+              valueOutOf={name === 'workload'
+                ? VALUE_OUT_OF.HOURS
+                : VALUE_OUT_OF.STANDARD
+              }
+            />
+          )
+        })}
+      </RightColumn>
     </ProfessorItemContainer>
   )
 };

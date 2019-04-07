@@ -55,6 +55,11 @@ const GlobalStyle = createGlobalStyle`
   html {
     font-family: 'Roboto', sans-serif;
   }
+
+  body {
+    background-color: #B12E2A;
+    height: 100vh;
+  }
 `;
 
 export default GlobalStyle;

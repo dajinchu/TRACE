@@ -171,7 +171,7 @@ const CourseItem = ({ name, code, professors, metrics }) => {
             </thead>
             <tbody>
               {professors.map((prof) =>
-                <tr>
+                <tr key={prof.name}>
                   <EachProf>{prof.name}</EachProf>
                   <TableDetail value={prof.effectiveness}>{(prof.effectiveness > 0) ? "+" + prof.effectiveness : (prof.effectiveness < 0) ? "-" + prof.effectiveness : prof.effectiveness}</TableDetail>
                   <TableDetail value={prof.personality}>{(prof.personality > 0) ? "+" + prof.personality : (prof.personality < 0) ? "-" + prof.effectiveness : prof.effectiveness}</TableDetail>
