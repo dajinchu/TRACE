@@ -3,14 +3,9 @@ import json
 import os
 import time
 
-import requests
 from dotenv import load_dotenv
 
-from login import login
-
-headers = {
-    'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0'
-}
+from login import login, auth_get
 
 COURSE_KEYS = ['UID', 'id', 'instructorId', 'termId', 'schoolCode', 'number', 'section', 'type']
 def get_courses_page(n, term):
@@ -23,7 +18,7 @@ def get_courses_page(n, term):
         'termId': str(term)
     }
     url = 'https://www.applyweb.com/eval/new/reportbrowser/evaluatedCourses'
-    r = requests.get(url, cookies=cookies, headers=headers, params=query)
+    r = auth_get(url, params=query)
     course_info = r.json()['data']
     for course in course_info:
         course['UID'] = '%i-%i-%i'%(course['id'], course['instructorId'], course['termId'])
@@ -46,11 +41,6 @@ def get_all_courses():
 
 
 if __name__ == "__main__":
-    load_dotenv()
-    username = os.getenv('NEU_USER')
-    password = os.getenv('NEU_PASS')
-
-    cookies = login(username, password)
     import sys
     courses = get_all_courses()
     folder = sys.argv[1]
