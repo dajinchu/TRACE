@@ -9,6 +9,7 @@ COURSES = os.path.join('sample_data', 'courses.csv')
 AGG_COURSE = os.path.join('sample_data', 'sortedbycourse.csv')
 AGG_PROF = os.path.join('sample_data', 'sortedbyprof.csv')
 AGG_PROF_COURSE = os.path.join('sample_data', 'sortedbycourse_prof.csv')
+COMMENTS = os.path.join('sample_data', 'comments.csv')
 
 def get_metric(prof, code):
     for metric in agg_prof_course:
@@ -24,15 +25,23 @@ METRICS = ["lecture", "workload", "personality", "overall", "challenge", "learni
 def just_metrics(metric_row):
     return {key:metric_row[key] for key in METRICS}
 
+def get_course_comments(code):
+    for row in comments:
+        if row['code'] == code:
+            return list(filter(bool, [row['course-comment'],row['learning-comment'],row['instructor-related']]))
+    return []
+
 
 with open(COURSES, 'r') as coursesfile,\
         open(AGG_COURSE, 'r') as agg_coursefile,\
         open(AGG_PROF, 'r') as agg_proffile,\
-        open(AGG_PROF_COURSE, 'r') as agg_prof_coursefile:
+        open(AGG_PROF_COURSE, 'r') as agg_prof_coursefile,\
+        open(COMMENTS, 'r') as commentsfile:
     courses = list(csv.DictReader(coursesfile))
     agg_course = list(csv.DictReader(agg_coursefile))
     agg_prof = list(csv.DictReader(agg_proffile))
     agg_prof_course = list(csv.DictReader(agg_prof_coursefile))
+    comments = list(csv.DictReader(commentsfile))
 
     # get metrics for the courses, with detailed info on the profs_course for each course
     for metrics in agg_course:
@@ -46,10 +55,12 @@ with open(COURSES, 'r') as coursesfile,\
 
         profs = [{'UID': get_instructor_ID(pc_metric['prof']),'name': pc_metric['prof'], 'metrics': just_metrics(pc_metric)}
                  for pc_metric in agg_prof_course if pc_metric['code'] == code]
+        
+        course_comments = get_course_comments(code)
 
-        print(UID)
         document = {
             'type': 'course',
+            'comments': course_comments,
             'UID': UID,
             'code': code,
             'name': name,
@@ -59,7 +70,7 @@ with open(COURSES, 'r') as coursesfile,\
         es.index(index='courses', id=UID, doc_type='_doc', body=document)
 
     for p_metric in agg_prof:
-        UID = get_instructor_ID(p_metric['prof']);
+        UID = get_instructor_ID(p_metric['prof'])
         document = {
             'type': 'prof',
             'UID': UID,
