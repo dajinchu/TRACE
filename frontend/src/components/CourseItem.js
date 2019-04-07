@@ -2,22 +2,21 @@ import React from 'react';
 import styled from 'styled-components';
 
 const CourseContainer = styled.div`
-  margin-top: 1em;
+  padding: 20px 30px;
   display: flex;
   background: #F7F7F7;
-  box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.5);
+  box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.5);
   border-radius: 5px;
 `;
 
 const Column = styled.div`
   max-width: 33%;
   min-width: 33%;
-  padding-left: 30px;
   flex-grow: 1;
 `;
 
 const Header = styled.h1`
-  padding: 20px 0;
+  padding: 0 0 20px;
   font-size: 18px;
   letter-spacing: .1em;
   display: flex;
@@ -38,15 +37,15 @@ const CourseTitle = styled.div`
   max-width: 70%;
 `
 const CourseCode = styled.div`
-  margin: 10px 0px;
-  font-size: 14px;
+  margin: 15px 0px;
+  font-size: 18px;
   line-height: normal;
   letter-spacing: 0.05em;
   color: #828282;
 `;
 
 const ProfessorRatings = styled.div`
-  margin: 1em;
+  margin: 1em 0em 1em 1.5em;
   background: #E5E5E5;
   border-radius: 5px;
 `;
@@ -108,15 +107,37 @@ const TableDetail = styled.td`
   min-height: 40px;
 `;
 
-const CourseItem = ({ name, code, professors, collegeTag }) => {
+const CourseMetrics = styled.div`
+  font-weight: 600;
+  font-size: 48px;
+  color: #A3874A;
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: space-around;
+  > *:not(:last-child) {
+    padding-right: 10px;
+  }
+`;
 
+const CourseMetric = styled.div`
+  text-align: center;
+`;
+
+const CourseMetricSubtext = styled.div`
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: .1em;
+`;
+
+const CourseItem = ({ name, code, professors, metrics }) => {
+  metrics = {average: 4.2, workload: 16}
   return (
     <CourseContainer>
       <Column>
         <Header>
           <ItemType>
             COURSE
-        </ItemType>
+          </ItemType>
           <HeaderLine />
         </Header>
 
@@ -126,7 +147,16 @@ const CourseItem = ({ name, code, professors, collegeTag }) => {
         <CourseCode>
           {code}
         </CourseCode>
-
+        <CourseMetrics>
+          <CourseMetric>
+            {metrics.average}<br/>
+            <CourseMetricSubtext>AVERAGE</CourseMetricSubtext>
+          </CourseMetric>
+          <CourseMetric>
+            {metrics.workload}h
+            <CourseMetricSubtext>WORKLOAD</CourseMetricSubtext>
+          </CourseMetric>
+        </CourseMetrics>
       </Column>
       <ProfessorRatings>
         <InnerProfRatings>
@@ -134,7 +164,7 @@ const CourseItem = ({ name, code, professors, collegeTag }) => {
             <thead>
               <tr>
                 <ProfessorCol>PROFESSOR</ProfessorCol>
-                <TableHead>AVG</TableHead>
+                <TableHead>OVR</TableHead>
                 <TableHead>LRN</TableHead>
                 <TableHead>DIF</TableHead>
               </tr>
