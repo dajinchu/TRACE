@@ -38,7 +38,7 @@ const Professor = ({ name, metrics }) => {
         return (
           <Column key={metric[0] + metric[1]}>
             <div>{capitalize(metric[0])}</div>
-            <div>{round(metric[1], 2)}</div>
+            <div>{round(metric[1], 1)}</div>
           </Column>
         );
       })}

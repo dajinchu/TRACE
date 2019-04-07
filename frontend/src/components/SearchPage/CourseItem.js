@@ -136,19 +136,59 @@ const CourseMetricSubtext = styled.div`
   letter-spacing: .1em;
 `;
 
+const PlusWrapper = styled.span`
+  margin-left: 5px;
+  color: rgb(0,97,0);
+`;
+
+const PlusIndicator = ({ value }) => {
+  return (
+    <PlusWrapper>
+      <FA name="arrow-up" style={{ marginRight: '5px' }} />
+      {value}
+    </PlusWrapper>
+  );
+}
+
+const MinusWrapper = styled.span`
+  margin-left: 5px;
+  color: rgb(156,0,6);
+`;
+
+const MinusIndicator = ({ value }) => {
+  return (
+    <MinusWrapper>
+      <FA name="arrow-down" style={{ marginRight: '5px' }} />
+      {Math.abs(value)}
+    </MinusWrapper>
+  );
+}
+
+const getDifferenceIndicator = difToAverage => {
+  if (Math.abs(difToAverage) < .3) {
+    return null;
+  }
+  if (difToAverage > 0) {
+    return <PlusIndicator value={difToAverage} />;
+  } else {
+    return <MinusIndicator value={difToAverage} />;
+  }
+}
+
 const CourseItem = ({ name, code, professors, metrics, UID }) => {
   let newProfessors = professors.map((prof) => ({
-    metrics: Object.entries(prof.metrics).map(metric => {
-      let newMetric = metric[1];
-      return metric.difToAverage = metric[1] - metrics[metric[0]];
-    }),
-    ...prof
+    ...prof,
+    metrics: Object.entries(prof.metrics).reduce((x, y) => {
+      let newMetric = { value: y[1] };
+      newMetric.difToAverage = y[1] - metrics[y[0]];
+      return { ...x, [y[0]]: newMetric };
+    }, {})
   }));
   newProfessors.sort(prof => prof.metrics.difToAverage);
   return (
     <CourseContainer>
         <Column>
-      <StyledLink to={`course/:${UID}`}>
+      <StyledLink to={`course/${UID}`}>
           <Header>
             <ItemType>
               COURSE
@@ -164,11 +204,11 @@ const CourseItem = ({ name, code, professors, metrics, UID }) => {
           </CourseCode>
           <CourseMetrics>
             <CourseMetric>
-              {round(metrics.overall, 2)}<br/>
+              {round(metrics.overall, 1)}<br/>
               <CourseMetricSubtext>AVERAGE</CourseMetricSubtext>
             </CourseMetric>
             <CourseMetric>
-              {round(metrics.workload, 2)}h
+              {round(metrics.workload, 0)}h
               <CourseMetricSubtext>WORKLOAD</CourseMetricSubtext>
             </CourseMetric>
           </CourseMetrics>
@@ -186,13 +226,23 @@ const CourseItem = ({ name, code, professors, metrics, UID }) => {
               </tr>
             </thead>
             <tbody>
-              {professors.map((prof) =>
+              {newProfessors.map((prof, index) => index < 3 ?
                 <tr key={prof.name}>
                   <EachProf>{prof.name}</EachProf>
-                  <TableDetail>{round(prof.metrics.overall, 2)}</TableDetail>
-                  <TableDetail>{round(prof.metrics.learning, 2)}</TableDetail>
-                  <TableDetail>{round(prof.metrics.challenge, 2)}</TableDetail>
+                  <TableDetail>
+                    {round(prof.metrics.overall.value, 1)}
+                    {getDifferenceIndicator(round(prof.metrics.overall.difToAverage, 1))}
+                  </TableDetail>
+                  <TableDetail>
+                    {round(prof.metrics.learning.value, 1)}
+                    {getDifferenceIndicator(round(prof.metrics.learning.difToAverage, 1))}
+                  </TableDetail>
+                  <TableDetail>
+                    {round(prof.metrics.challenge.value, 1)}
+                    {getDifferenceIndicator(round(prof.metrics.challenge.difToAverage, 1))}
+                  </TableDetail>
                 </tr>
+                : null
               )}
             </tbody>
           </ProfessorTable>

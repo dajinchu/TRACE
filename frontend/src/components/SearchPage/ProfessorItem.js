@@ -76,8 +76,6 @@ const CourseMetricSubtext = styled.div`
 const Metric = ({name, value, valueOutOf}) => {
   let percentOfCircumfrence = value / valueOutOf;
   let circumfrence = 2 * RING_RADIUS * 3.14 * (1 - percentOfCircumfrence);
-  console.log('%', percentOfCircumfrence)
-  console.log(circumfrence)
   return (
     <CourseMetric>
       <svg width="120" height="120" viewBox="0 0 120 120" style={{ transform: 'rotate(-90deg)' }}>
