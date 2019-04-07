@@ -6,6 +6,8 @@ import xlrd
 from collections import OrderedDict
 import json
 
+from operator import add
+
 def parse_excel(file):
     # Open the workbook and select the first worksheet
     wb = xlrd.open_workbook(file)
@@ -132,13 +134,9 @@ def is_lecture(file):
         for line in reader:
             if line["UID"] in file:
                 return line["type"] == "Lecture"
+    raise Exception("Course not found in courses.csv")
 
-def sort_by_prof():
-    with open("./ratings.csv", 'r') as infile:
-        reader = csv.reader(infile)
-        next(reader)
-        sorted_list = sorted(reader, key=lambda row: row[0])
-    return sorted_list
+
 
 #AGGREGATE FUNC
 def aggregate(outfile, aggregate_by, aggregate_column):
@@ -181,90 +179,85 @@ def aggregate(outfile, aggregate_by, aggregate_column):
 
 
 def prof_aggregate():
-    with open("sortedbyprof.csv", 'w', newline='') as outfile:
+    with open("sample_data/sortedbyprof.csv", 'w', newline='') as outfile:
         writer = csv.writer(outfile)
-        prof_name = ""
-        agg_le, agg_w, agg_p, agg_o, agg_c, agg_lv, count = 0, 0, 0, 0, 0, 0, 0
-        for row in sort_by_prof():
+        writer.writerow(
+            ["Prof", "Lecture Effective", "Workload", "Personality", "Overall", "Challenge",
+             "Learning Value"])
+        sorted = sort_by_prof()
+        prof_name = sorted[0][0]
+        count = 0
+        aggs = [0]*6
+        for row in sorted:
             if row[0] == prof_name:
-                agg_le = agg_le + float(row[2])
-                agg_w = agg_w + float(row[3])
-                agg_p = agg_p + float(row[4])
-                agg_o = agg_o + float(row[5])
-                agg_c = agg_c + float(row[6])
-                agg_lv = agg_lv + float(row[7])
+                aggs = list(map(add, aggs, row[2:8]))
                 count = count+1
             else:
-                if count == 0:
-                    writer.writerow(
-                        ["Prof", "Course", "Lecture Effective", "Workload", "Personality", "Overall", "Challenge",
-                         "Learning Value"])
-                else:
-                    writer.writerow(
-                        [prof_name, row[1], agg_le / count, agg_w / count, agg_p / count, agg_o / count, agg_c / count,
-                         agg_lv / count])
+                writer.writerow([prof_name] + [agg/count for agg in aggs])
                 prof_name = row[0]
-                agg_le = float(row[2])
-                agg_w = float(row[3])
-                agg_p = float(row[4])
-                agg_o = float(row[5])
-                agg_c = float(row[6])
-                agg_lv = float(row[7])
+                aggs = row[2:8]
                 count = 1
-        writer.writerow(
-            [prof_name, row[1], agg_le / count, agg_w / count, agg_p / count, agg_o / count, agg_c / count,
-             agg_lv / count])
+        writer.writerow([prof_name] + [agg / count for agg in aggs])
 
 
 
 def course_aggregate():
-    with open("sortedbycourse.csv", 'w', newline='') as outfile:
+    with open("sample_data/sortedbycourse.csv", 'w', newline='') as outfile:
         writer = csv.writer(outfile)
-        course_name = ""
-        agg_le, agg_w, agg_p, agg_o, agg_c, agg_lv, count = 0, 0, 0, 0, 0, 0, 0
-        for row in sort_by_prof():
+        writer.writerow(
+            ["Course", "Lecture Effective", "Workload", "Personality", "Overall", "Challenge",
+             "Learning Value"])
+        sorted = sort_by_course()
+        course_name = sorted[0][1]
+        count = 0
+        aggs = [0]*6
+        for row in sorted:
             if row[1] == course_name:
-                agg_le = agg_le + float(row[2])
-                agg_w = agg_w + float(row[3])
-                agg_p = agg_p + float(row[4])
-                agg_o = agg_o + float(row[5])
-                agg_c = agg_c + float(row[6])
-                agg_lv = agg_lv + float(row[7])
+                aggs = list(map(add, aggs, row[2:8]))
                 count = count+1
             else:
-                if count == 0:
-                    writer.writerow(
-                        ["Prof", "Course", "Lecture Effective", "Workload", "Personality", "Overall", "Challenge",
-                         "Learning Value"])
-                else:
-                    writer.writerow(
-                        [course_name, row[1], agg_le / count, agg_w / count, agg_p / count, agg_o / count, agg_c / count,
-                         agg_lv / count])
-                course_name = row[0]
-                agg_le = float(row[2])
-                agg_w = float(row[3])
-                agg_p = float(row[4])
-                agg_o = float(row[5])
-                agg_c = float(row[6])
-                agg_lv = float(row[7])
+                writer.writerow([course_name] + [agg/count for agg in aggs])
+                course_name = row[1]
+                aggs = row[2:8]
                 count = 1
+        writer.writerow([course_name] + [agg / count for agg in aggs])
+
+def course_prof_aggregate():
+    with open("sample_data/sortedbycourse_prof.csv", 'w', newline='') as outfile:
+        writer = csv.writer(outfile)
         writer.writerow(
-            [course_name, row[1], agg_le / count, agg_w / count, agg_p / count, agg_o / count, agg_c / count,
-             agg_lv / count])
+            ["Prof", "Course", "Lecture Effective", "Workload", "Personality", "Overall", "Challenge",
+             "Learning Value"])
+        sorted = sort_by_prof_course()
+        prof_course = sorted[0][0:2]
+        count = 0
+        aggs = [0]*6
+        for row in sorted:
+            if row[0:2] == prof_course:
+                aggs = list(map(add, aggs, row[2:8]))
+                count = count+1
+            else:
+                writer.writerow(row[0:2] + [agg/count for agg in aggs])
+                prof_course = row[0:2]
+                aggs = row[2:8]
+                count = 1
+        writer.writerow(row[0:2] + [agg / count for agg in aggs])
 
 
+def sort_by_prof():
+    return sorted(ratings, key=lambda row: row[0])
 
 def sort_by_course():
-    with open("./ratings.csv", 'r') as infile:
-        reader = csv.reader(infile)
-        next(reader)
-        sorted_list = sorted(reader, key=lambda row: row[1])
-    return sorted_list
+    return sorted(ratings, key=lambda row: row[1])
+
+def sort_by_prof_course():
+    return sorted(ratings, key=lambda row: (row[0], row[1]))
 
 
 if __name__ == '__main__':
     ratings_dir = './ratings'
-    with open("ratings.csv", 'w', newline='') as outfile:
+    ratings = []
+    with open("./sample_data/ratings.csv", 'w', newline='') as outfile:
         writer = csv.writer(outfile)
         writer.writerow(["Prof", "Course", "Lecture Effective", "Workload", "Personality", "Overall", "Challenge", "Learning Value"])
         for filename in os.listdir(ratings_dir):
@@ -274,7 +267,7 @@ if __name__ == '__main__':
                 prof = get_prof(file)
                 course_name = get_course_name(file)
                 writer.writerow([prof] + [course_name] + metrics)
+                ratings.append([prof] + [course_name] + metrics)
 
-    prof_aggregate()
-    course_aggregate()
+    course_prof_aggregate()
 
