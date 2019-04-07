@@ -1,17 +1,22 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+
 import './index.css';
-import SearchPage from './components/SearchPage';
+import 'font-awesome/css/font-awesome.min.css';
+import SearchPage from './components/SearchPage/SearchPage';
+import CoursePage from './components/CoursePage/CoursePage';
 import * as serviceWorker from './serviceWorker';
 import GlobalStyle, { CSSReset } from './GlobalStyle'
 
 const App = () => {
   return (
-    <>
+    <Router>
       <CSSReset />
       <GlobalStyle />
-      <SearchPage />
-    </>
+      <Route path="/" exact component={SearchPage} />
+      <Route path="/course/:id" exact component={CoursePage} />
+    </Router>
   );
 }
 

@@ -1,12 +1,13 @@
 import React from 'react';
 import FontAwesome from 'react-fontawesome'
 import styled from 'styled-components';
-import 'font-awesome/css/font-awesome.min.css';
 
 const VALUE_OUT_OF = {
   STANDARD: 5,
   HOURS: 20,
 };
+
+const RING_RADIUS = 36;
 
 const ProfessorItemContainer = styled.div`
   background-color: #F7F7F7;
@@ -74,13 +75,15 @@ const CourseMetricSubtext = styled.div`
 
 const Metric = ({name, value, valueOutOf}) => {
   let percentOfCircumfrence = value / valueOutOf;
-  let circumfrence = 2 * 54 * 3.14 * (1 - percentOfCircumfrence);
+  let circumfrence = 2 * RING_RADIUS * 3.14 * (1 - percentOfCircumfrence);
+  console.log('%', percentOfCircumfrence)
+  console.log(circumfrence)
   return (
     <CourseMetric>
       <svg width="120" height="120" viewBox="0 0 120 120" style={{ transform: 'rotate(-90deg)' }}>
-        <circle cx="60" cy="60" r="54" fill="none" stroke="#E6E6E6" strokeWidth="10" />
-        <circle cx="60" cy="60" r="54" fill="none" stroke="#A3874A" strokeWidth="10"
-          strokeDasharray="339.292" strokeDashoffset={circumfrence} />
+        <circle cx="60" cy="60" r={`${RING_RADIUS}`} fill="none" stroke="#E6E6E6" strokeWidth="7" />
+        <circle cx="60" cy="60" r={`${RING_RADIUS}`} fill="none" stroke="#A3874A" strokeWidth="7"
+          strokeDasharray={`${2 * 3.14 * RING_RADIUS}`} strokeDashoffset={circumfrence} />
       </svg>
       <CourseMetricSubtext>{name}</CourseMetricSubtext>
     </CourseMetric>

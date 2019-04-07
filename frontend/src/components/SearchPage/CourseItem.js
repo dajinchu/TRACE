@@ -1,5 +1,14 @@
 import React from 'react';
+import FA from 'react-fontawesome';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
+
+import { round } from '../../utils/parsingUtils';
+
+const StyledLink = styled(Link)`
+  text-decoration: none;
+  margin-bottom: 15px;
+`;
 
 const CourseContainer = styled.div`
   padding: 20px 30px;
@@ -78,7 +87,7 @@ const ProfessorTable = styled.table`
 
 const ProfessorCol = styled.th`
   text-align: left;
-  width: 50%;
+  width: 40%;
   padding: 1em 0em 1em 1.3em;
   font-size: 18px;
   line-height: normal;
@@ -97,13 +106,12 @@ const TableHead = styled.th`
   font-size: 18px;
   line-height: normal;
   letter-spacing: 0.1em;
-  text-align: right;
+  text-align: center;
 `;
 
 const TableDetail = styled.td`
   color: ${(props) => (props.value > 0) ? '#368D20' : (props.value < 0) ? "#8D2720" : "black"};
-  text-align: right;
-  padding-right: 12px;
+  text-align: center;
   min-height: 40px;
 `;
 
@@ -129,35 +137,44 @@ const CourseMetricSubtext = styled.div`
   letter-spacing: .1em;
 `;
 
-const CourseItem = ({ name, code, professors, metrics }) => {
-  metrics = {average: 4.2, workload: 16}
+const CourseItem = ({ name, code, professors, metrics, key }) => {
+  let newProfessors = professors.map((prof) => ({
+    metrics: Object.entries(prof.metrics).map(metric => {
+      let newMetric = metric[1];
+      return metric.difToAverage = metric[1] - metrics[metric[0]];
+    }),
+    ...prof
+  }));
+  newProfessors.sort(prof => prof.metrics.difToAverage);
   return (
     <CourseContainer>
-      <Column>
-        <Header>
-          <ItemType>
-            COURSE
-          </ItemType>
-          <HeaderLine />
-        </Header>
-
-        <CourseTitle>
-          {name}
-        </CourseTitle>
-        <CourseCode>
-          {code}
-        </CourseCode>
-        <CourseMetrics>
-          <CourseMetric>
-            {metrics.average}<br/>
-            <CourseMetricSubtext>AVERAGE</CourseMetricSubtext>
-          </CourseMetric>
-          <CourseMetric>
-            {metrics.workload}h
-            <CourseMetricSubtext>WORKLOAD</CourseMetricSubtext>
-          </CourseMetric>
-        </CourseMetrics>
-      </Column>
+        <Column>
+      <StyledLink to={`course/${key}`}>
+          <Header>
+            <ItemType>
+              COURSE
+            </ItemType>
+            <HeaderLine />
+          </Header>
+          <CourseTitle>
+            {name}
+            <FA name="external-link-alt" />
+          </CourseTitle>
+          <CourseCode>
+            {code}
+          </CourseCode>
+          <CourseMetrics>
+            <CourseMetric>
+              {round(metrics.overall, 2)}<br/>
+              <CourseMetricSubtext>AVERAGE</CourseMetricSubtext>
+            </CourseMetric>
+            <CourseMetric>
+              {round(metrics.workload, 2)}h
+              <CourseMetricSubtext>WORKLOAD</CourseMetricSubtext>
+            </CourseMetric>
+          </CourseMetrics>
+      </StyledLink>
+        </Column>
       <ProfessorRatings>
         <InnerProfRatings>
           <ProfessorTable>
@@ -173,9 +190,9 @@ const CourseItem = ({ name, code, professors, metrics }) => {
               {professors.map((prof) =>
                 <tr key={prof.name}>
                   <EachProf>{prof.name}</EachProf>
-                  <TableDetail value={prof.effectiveness}>{(prof.effectiveness > 0) ? "+" + prof.effectiveness : (prof.effectiveness < 0) ? "-" + prof.effectiveness : prof.effectiveness}</TableDetail>
-                  <TableDetail value={prof.personality}>{(prof.personality > 0) ? "+" + prof.personality : (prof.personality < 0) ? "-" + prof.effectiveness : prof.effectiveness}</TableDetail>
-                  <TableDetail value={prof.challenge}>{(prof.challenge > 0) ? "+" + prof.challenge : (prof.challenge < 0) ? "-" + prof.challenge : prof.challenge}</TableDetail>
+                  <TableDetail>{round(prof.metrics.overall, 2)}</TableDetail>
+                  <TableDetail>{round(prof.metrics.learning, 2)}</TableDetail>
+                  <TableDetail>{round(prof.metrics.challenge, 2)}</TableDetail>
                 </tr>
               )}
             </tbody>
