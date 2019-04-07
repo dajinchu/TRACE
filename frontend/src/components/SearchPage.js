@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
+import CourseItem from './CourseItem'
+
 export const BACKEND_BASE_URL = 'https://trace.dajinchu.now.sh/backend/api';
 export const SEARCH_ITEM_TYPES = {
   PROF: 'prof',
@@ -61,7 +63,12 @@ const SearchPage = (props) => {
           if (searchItem.type === SEARCH_ITEM_TYPES.PROF) {
             return null; // PROFITEM
           } else if (searchItem.type === SEARCH_ITEM_TYPES.COURSE) {
-            return null; // COURSEITEM
+            return (
+              <CourseItem 
+                name={searchItem.name}
+                code={searchItem.code}
+              />
+            ); // COURSEITEM
           } else {
             console.error(`Unrecognized search item type "${searchItem.type}".`)
             return null;

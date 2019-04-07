@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 const CourseContainer = styled.div`
@@ -84,26 +84,22 @@ const ProfessorRatings = styled.div`
   border-radius: 5px;
 `
 
-class SearchPage extends Component {
-  render() {
-    return (
-      <SearchPageContainer>
-      <CourseContainer>
+const CourseItem = ({ name, code, professors }) => {
+  return (
+    <CourseContainer>
       <ItemType>
         COURSE
       </ItemType>
-      <Line/>
+      <Line />
       <CourseTitle>
-        Object-Oriented Design
+        {name}
       </CourseTitle>
       <CourseCode>
-      CS 3500
+        {code}
       </CourseCode>
-      <ProfessorRatings/>
-      </CourseContainer>
-      </SearchPageContainer>
-   );
-  }
+      <ProfessorRatings />
+    </CourseContainer>
+  );
 }
 
 export default CourseItem;
