@@ -10,5 +10,6 @@
     { "src": "/manifest.json", "dest": "/frontend/manifest.json" },
     {"src": "/backend/api/(.*)", "dest": "/backend/api/$1" },
     {"src": "/.*", "dest": "/frontend/index.html"}
-  ]
+  ],
+  "alias": ["trace.dajinchu.now.sh"]
 }
