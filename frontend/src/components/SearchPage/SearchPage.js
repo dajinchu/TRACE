@@ -87,6 +87,8 @@ const SearchPage = () => {
     }, 100)
   };
 
+  handleInitiateSearch();
+
   return (
     <SearchPageContainer>
         <Title>

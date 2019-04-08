@@ -55,6 +55,34 @@ const CoursesTable = styled.div`
   }
 `;
 
+const ProfessorItemContainer = styled.div`
+  display: flex;
+  justify-content: space-around;
+  > *:not(:last-child) {
+    border-right: 1px solid #000;
+  }
+`;
+
+const CommentHeader = styled.h1`
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+`;
+
+const Info = styled.div`
+  background-color: #F7F7F7;
+  border-radius: 5px;
+  padding: 20px 30px;
+  box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.5);
+  margin-bottom: 13px;
+`;
+
+const CommentBlurb = styled.div`
+  flex-grow: 1;
+  text-align: center;
+`;
+
 const CoursePage = (props) => {
   const [data, setData] = useState({});
 
@@ -82,6 +110,20 @@ const CoursePage = (props) => {
           {(data || {}).code}
         </CourseNumber>
       </Header>
+      <Info>
+        <CommentHeader>
+          Course Comments
+        </CommentHeader>
+        <ProfessorItemContainer>
+          {(data.comments || []).map(comment => {
+            return (
+              <CommentBlurb>
+                {`"${comment}"`}
+              </CommentBlurb>
+            )
+          })}
+        </ProfessorItemContainer>
+      </Info>
       <CoursesTable>
         {((data || {}).profs || []).map(prof => {
           return (
