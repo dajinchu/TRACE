@@ -15,10 +15,10 @@ app.get('*', (req, res) => {
     res.json([]);
     return;
   }
-  filter = req.user ? "" : "_exclude=*.comments,*.metrics";
-  request({json:true,uri:"http://35.237.184.11:9200/courses/_doc/"+UID+"/_source"+filter})
+  filter = req.user ? "" : "?_source_excludes=*comments,*metrics";
+  request({json:true,uri:"http://35.237.184.11:9200/courses/_doc/"+UID+filter})
     .then(body => {
-      res.json(body);
+      res.json(body._source);
     })
     .catch(err => {
       res.sendStatus(500);
