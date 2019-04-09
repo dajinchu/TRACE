@@ -116,7 +116,7 @@ const CoursePage = (props) => {
         <ProfessorItemContainer>
           {(data.comments || []).map(comment => {
             return (
-              <CommentBlurb>
+              <CommentBlurb key={comment}>
                 {`"${comment}"`}
               </CommentBlurb>
             )

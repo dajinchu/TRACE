@@ -4,6 +4,7 @@ import FontAwesome from 'react-fontawesome';
 
 import CourseItem from './CourseItem';
 import ProfessorItem from './ProfessorItem';
+import { useDebouncedEffect } from '../../utils/fetchingUtils';
 
 export const BACKEND_BASE_URL = 'https://trace.dajinchu.now.sh/backend/api';
 export const SEARCH_ITEM_TYPES = {
@@ -62,8 +63,7 @@ const SearchPage = () => {
   const [query, setQuery] = useState('');
   const [searchItems, setSearchItems] = useState([]);
 
-
-  useEffect(() => {
+  useDebouncedEffect(() => {
     fetch(
       `${BACKEND_BASE_URL}/search?q=${query}`,
     ).then(response => {
@@ -71,7 +71,7 @@ const SearchPage = () => {
         setSearchItems(data);
       });
     }).catch(error => console.error(error));
-  }, [query]);
+  }, [query], 200);
 
   const searchInput = useRef(null);
 
@@ -83,8 +83,10 @@ const SearchPage = () => {
       }
     }, 100)
   };
-
-  handleInitiateSearch();
+  
+  useEffect(() => {
+    handleInitiateSearch();
+  });
 
   return (
     <SearchPageContainer>
@@ -134,7 +136,7 @@ const SearchPage = () => {
           } else {
             console.error(`Unrecognized search item type "${searchItem.type}".`)
             return null;
-          };
+          }
         })}
       </SearchItemsContainer>
       <Footer>
