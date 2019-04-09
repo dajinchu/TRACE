@@ -7,18 +7,19 @@ import 'font-awesome/css/font-awesome.min.css';
 import SearchPage from './components/SearchPage/SearchPage';
 import CoursePage from './components/CoursePage/CoursePage';
 import * as serviceWorker from './serviceWorker';
-import GlobalStyle, { CSSReset } from './GlobalStyle'
+import GlobalStyle, { CSSReset } from './GlobalStyle';
+import Auth from './auth/Auth';
 
-const App = () => {
-  return (
-    <Router>
-      <CSSReset />
-      <GlobalStyle />
-      <Route path="/" exact component={SearchPage} />
-      <Route path="/course/:UID" exact component={CoursePage} />
-    </Router>
-  );
-}
+const auth = new Auth();
+
+const App = () => (
+  <Router>
+    <CSSReset />
+    <GlobalStyle />
+    <Route path="/" exact render={props => <SearchPage {...props} auth={auth} />} />
+    <Route path="/course/:UID" exact render={props => <CoursePage {...props} auth={auth} />} />
+  </Router>
+);
 
 ReactDOM.render(<App />, document.getElementById('root'));
 

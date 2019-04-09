@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
-import Professor from './Professor'
-import { BACKEND_BASE_URL } from '../SearchPage/SearchPage'
+import Professor from './Professor';
+import { BACKEND_BASE_URL } from '../SearchPage/SearchPage';
+// App.js
 
 const CoursePageContainer = styled.div`
   padding: 1em 14%;
@@ -86,20 +87,41 @@ const CommentBlurb = styled.div`
 const CoursePage = (props) => {
   const [data, setData] = useState({});
 
+  const { auth } = props;
+
   useEffect(() => {
-    fetch(`${BACKEND_BASE_URL}/course?id=${props.match.params.UID}`).then(response => {
-      response.json().then(response => {
+    if (!auth.isAuthenticated()) {
+      auth.login();
+    }
+  });
+
+  useEffect(() => {
+    const headers = new Headers();
+    if (localStorage.getItem('access_token')) {
+      headers.append('Authorization', `Bearer ${localStorage.getItem('access_token')}`);
+    }
+    fetch(
+      `${BACKEND_BASE_URL}/course?id=${props.match.params.UID}`, { headers },
+    ).then((response) => {
+      response.json().then((response) => {
         setData(response);
       });
-    }).catch(error => {
-      console.error(error)
+    }).catch((error) => {
+      console.error(error);
     });
   }, []);
 
   return (
     <CoursePageContainer>
       <NavHeader>
-        <StyledLink to="/"><HeaderText>SEARCH<br />TRACE.</HeaderText></StyledLink>
+        <StyledLink to="/">
+          <HeaderText>
+SEARCH
+            <br />
+TRACE.
+          </HeaderText>
+
+        </StyledLink>
       </NavHeader>
       <Header>
         <Title>
@@ -124,18 +146,16 @@ const CoursePage = (props) => {
         </ProfessorItemContainer>
       </Info>
       <CoursesTable>
-        {((data || {}).profs || []).map(prof => {
-          return (
-            <Professor
-              name={prof.name}
-              key={prof.name}
-              metrics={prof.metrics}
-            />
-          );
-        })}
+        {((data || {}).profs || []).map(prof => (
+          <Professor
+            name={prof.name}
+            key={prof.name}
+            metrics={prof.metrics}
+          />
+        ))}
       </CoursesTable>
     </CoursePageContainer>
- );
+  );
 };
 
 export default CoursePage;

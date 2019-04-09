@@ -6,11 +6,11 @@ import CourseItem from './CourseItem';
 import ProfessorItem from './ProfessorItem';
 import { useDebouncedEffect } from '../../utils/fetchingUtils';
 
-export const BACKEND_BASE_URL = 'https://trace.dajinchu.now.sh/backend/api';
+export const BACKEND_BASE_URL = '/backend/api';
 export const SEARCH_ITEM_TYPES = {
   PROF: 'prof',
   COURSE: 'course',
-}
+};
 
 const SearchPageContainer = styled.div`
 `;
@@ -59,14 +59,25 @@ const GithubLink = styled.a`
   color: #fff;
 `;
 
-const SearchPage = () => {
+const SearchPage = (props) => {
   const [query, setQuery] = useState('');
   const [searchItems, setSearchItems] = useState([]);
+  const { auth } = props;
+
+  useEffect(() => {
+    if (!auth.isAuthenticated()) {
+      auth.login();
+    }
+  });
 
   useDebouncedEffect(() => {
+    const headers = new Headers();
+    if (localStorage.getItem('access_token')) {
+      headers.append('Authorization', `Bearer ${localStorage.getItem('id_token')}`);
+    }
     fetch(
-      `${BACKEND_BASE_URL}/search?q=${query}`,
-    ).then(response => {
+      `${BACKEND_BASE_URL}/search?q=${query}`, { headers },
+    ).then((response) => {
       response.json().then((data) => {
         setSearchItems(data);
       });
@@ -76,12 +87,12 @@ const SearchPage = () => {
   const searchInput = useRef(null);
 
   const handleInitiateSearch = () => {
-    let interval = setInterval(() => {
+    const interval = setInterval(() => {
       if (searchInput.current != null) {
-        searchInput.current.focus()
-        clearInterval(interval)
+        searchInput.current.focus();
+        clearInterval(interval);
       }
-    }, 100)
+    }, 100);
   };
   
   useEffect(() => {
@@ -91,16 +102,18 @@ const SearchPage = () => {
   return (
     <SearchPageContainer>
       <Title>
-        SEARCH<br />TRACE.
+        SEARCH
+        <br />
+        TRACE.
       </Title>
       <SearchBarContainer>
         <FontAwesome
-          name='search'
+          name="search"
           size="3x"
           style={{
             color: '#FFFFFF',
             cursor: 'pointer',
-            padding: '10px'
+            padding: '10px',
           }}
           onClick={handleInitiateSearch}
         />
@@ -113,7 +126,7 @@ const SearchPage = () => {
 
       </SearchBarContainer>
       <SearchItemsContainer>
-        {searchItems.map(searchItem => {
+        {searchItems.map((searchItem) => {
           if (searchItem.type === SEARCH_ITEM_TYPES.PROF) {
             return (
               <ProfessorItem
@@ -122,7 +135,7 @@ const SearchPage = () => {
                 metrics={searchItem.metrics}
               />
             );
-          } else if (searchItem.type === SEARCH_ITEM_TYPES.COURSE) {
+          } if (searchItem.type === SEARCH_ITEM_TYPES.COURSE) {
             return (
               <CourseItem
                 key={searchItem.UID}
@@ -140,10 +153,16 @@ const SearchPage = () => {
         })}
       </SearchItemsContainer>
       <Footer>
-        By <GithubLink href='github.com/dajinchu'>Da-Jin</GithubLink>,&nbsp;
-        <GithubLink href='github.com/ryandrew14'>Ryan</GithubLink>,&nbsp;
-        <GithubLink href='github.com/talusvyatsky'>Tal</GithubLink>, and&nbsp;
-        <GithubLink href='github.com/sauhardar'>Sauharda</GithubLink>.
+        By
+        {' '}
+        <GithubLink href="github.com/dajinchu">Da-Jin</GithubLink>
+,&nbsp;
+        <GithubLink href="github.com/ryandrew14">Ryan</GithubLink>
+,&nbsp;
+        <GithubLink href="github.com/talusvyatsky">Tal</GithubLink>
+, and&nbsp;
+        <GithubLink href="github.com/sauhardar">Sauharda</GithubLink>
+.
       </Footer>
     </SearchPageContainer>
   );

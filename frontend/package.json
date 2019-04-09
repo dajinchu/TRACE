@@ -3,7 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "auth0-lock": "^11.14.1",
+    "eslint-config-airbnb": "^17.1.0",
     "font-awesome": "^4.7.0",
+    "global": "^4.3.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-fontawesome": "^1.6.1",
