@@ -1,9 +1,11 @@
 const express = require('express');
 const cors = require('cors');
 const request = require('request-promise-native');
+const jwtCheck = require('../auth.js');
 
 const app = express();
 app.use(cors());
+app.use(jwtCheck);
 module.exports = app;
 
 app.get('*', (req, res) => {
@@ -14,21 +16,24 @@ app.get('*', (req, res) => {
   }
   options = {
     method: 'POST',
-    uri: 'http://35.237.184.11:9200/courses,profs/_search',
+    uri: 'http://35.207.22.31:9200/courses,profs/_search',
     body: {
       "size": 20,
       "query": {
         "multi_match": {
-            "query": query,
-            "fields": ["name", "profs.name", "code^3"]
+          "query": query,
+          "fields": ["name", "profs.name", "code^3"]
         }
       },
-        "indices_boost" : [
-          { "profs" : 10 },
-          { "courses" : 1 }
+      "indices_boost" : [
+        { "profs" : 10 },
+        { "courses" : 1 }
       ]
     },
     json: true,
+  };
+  if(!req.user){
+    options.body['_source'] = {'excludes': ['*comments','*metrics']};
   }
   request(options)
     .then(body => {
