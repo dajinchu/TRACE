@@ -73,7 +73,7 @@ const SearchPage = (props) => {
   useDebouncedEffect(() => {
     const headers = new Headers();
     if (localStorage.getItem('access_token')) {
-      headers.append('Authorization', `Bearer ${localStorage.getItem('id_token')}`);
+      headers.append('Authorization', `Bearer ${localStorage.getItem('access_token')}`);
     }
     fetch(
       `${BACKEND_BASE_URL}/search?q=${query}`, { headers },

@@ -1,9 +1,11 @@
 const express = require('express');
 const cors = require('cors')
 const request = require('request-promise-native');
+const jwtCheck = require('../auth.js');
 
 const app = express();
 app.use(cors())
+app.use(jwtCheck);
 module.exports = app;
 
 app.get('*', (req, res) => {
