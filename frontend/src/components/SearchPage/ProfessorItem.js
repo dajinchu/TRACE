@@ -89,8 +89,9 @@ const Metric = ({name, value, valueOutOf}) => {
 };
 
 const ProfessorItem = ({ name, email, homepage, metrics }) => {
-  const displayMetrics = Object.entries(metrics).filter(m => 
-    m[0] === 'workload' || m[0] === 'overall' || m[0] === 'personality');
+  const displayMetrics = metrics ? Object.entries(metrics).filter(m => 
+    m[0] === 'workload' || m[0] === 'overall' || m[0] === 'personality')
+    : [];
   return (
     <ProfessorItemContainer>
       <LeftColumn>
