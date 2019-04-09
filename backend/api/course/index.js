@@ -13,9 +13,9 @@ app.get('*', (req, res) => {
     res.json([]);
     return;
   }
-  request({json:true,uri:"http://35.237.184.11:9200/courses/_doc/"+UID})
+  request({json:true,uri:"http://35.237.184.11:9200/courses/_doc/"+UID+"/_source"})
     .then(body => {
-      res.json(body._source);
+      res.json(body);
     })
     .catch(err => {
       res.sendStatus(500);

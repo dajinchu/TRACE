@@ -104,7 +104,7 @@ def parse_excel(file):
             if hours:
                 workload = median(hours)
             else:
-                workload = 0
+                workload = -1
 
     lecture_effectiveness = lecture_effectiveness / len(lecture_effectiveness_vals)
     workload = workload / len(workload_vals)
