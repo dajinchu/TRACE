@@ -33,7 +33,7 @@ app.get('*', (req, res) => {
     json: true,
   };
   if(!req.user){
-    options.body['_source'] = ['name', 'profs.name', 'code'];
+    options.body['_source']['exclude'] = ['*.comments','*.metrics'];
   }
   request(options)
     .then(body => {

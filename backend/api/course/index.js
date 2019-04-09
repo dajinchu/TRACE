@@ -15,7 +15,8 @@ app.get('*', (req, res) => {
     res.json([]);
     return;
   }
-  request({json:true,uri:"http://35.237.184.11:9200/courses/_doc/"+UID+"/_source"})
+  filter = req.user ? "" : "_exclude=*.comments,*.metrics";
+  request({json:true,uri:"http://35.237.184.11:9200/courses/_doc/"+UID+"/_source"+filter})
     .then(body => {
       res.json(body);
     })
