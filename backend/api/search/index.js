@@ -16,7 +16,7 @@ app.get('*', (req, res) => {
   }
   options = {
     method: 'POST',
-    uri: 'http://35.237.184.11:9200/courses,profs/_search',
+    uri: 'http://35.207.22.31:9200/courses,profs/_search',
     body: {
       "size": 20,
       "query": {
