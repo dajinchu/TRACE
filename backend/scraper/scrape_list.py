@@ -7,15 +7,28 @@ from dotenv import load_dotenv
 
 from login import login, auth_get
 
-COURSE_KEYS = ['UID', 'id', 'instructorId', 'termId', 'schoolCode', 'number', 'section', 'type',
+# schools: 
+schools = {
+    'ccis': 'CS',
+    'cos': 'SC',
+    'business': 'BA',
+    'bouve': 'BV',
+    'camd': 'AM',
+    'coe': 'EN',
+    'global': 'GN',
+    'law': 'LW',
+    'cps': 'PS',
+    'cssh': 'SH'
+}
+COURSE_KEYS = ['UID', 'id', 'instructorId', 'termId', 'schoolCode', 'departmentCode', 'number', 'section', 'type',
                'name', 'instructorName' ]
-def get_courses_page(n, term):
+def get_courses_page(n, term, school):
     """https://www.applyweb.com/eval/new/reportbrowser/evaluatedCourses?excludeTA=false&page=1&rpp=15&termId=0"""
     query = {
         'excludeTA': 'false',
         'page': str(n),
         'rpp': 500,
-        'schoolCodes': 'CS',
+        'schoolCodes': school,
         'termId': str(term)
     }
     url = 'https://www.applyweb.com/eval/new/reportbrowser/evaluatedCourses'
@@ -28,12 +41,12 @@ def get_courses_page(n, term):
     print(len(course_info))
     return course_info
 
-def get_all_courses():
+def get_all_courses(school):
     courses = []
     page_num = 1
     while True:
         print("scraping page ", page_num)
-        page = get_courses_page(page_num, 0)
+        page = get_courses_page(page_num, 0, school)
         courses.extend(page)
         if not page:
             break
@@ -44,8 +57,8 @@ def get_all_courses():
 
 if __name__ == "__main__":
     import sys
-    courses = get_all_courses()
-    folder = sys.argv[1]
+    folder = sys.argv[2]
+    courses = get_all_courses(schools[sys.argv[1]])
     with open(folder+'/courses.csv', 'w') as outfile:
         writer = csv.DictWriter(outfile, fieldnames=COURSE_KEYS)
         writer.writeheader()

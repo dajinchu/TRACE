@@ -101,7 +101,10 @@ def parse_excel(file):
                 hours.append(8)
             for x in range(0, int(dimension["1"])):
                 hours.append(4)
-            workload = median(hours)
+            if hours:
+                workload = median(hours)
+            else:
+                workload = 0
 
     lecture_effectiveness = lecture_effectiveness / len(lecture_effectiveness_vals)
     workload = workload / len(workload_vals)
@@ -113,27 +116,24 @@ def parse_excel(file):
     return [lecture_effectiveness, workload, personality, overall, challenge, learning_value]
 
 def get_prof(file):
-    # Open the workbook and select the first worksheet
-    wb = xlrd.open_workbook(file)
-    sh = wb.sheet_by_index(0)
-    return sh.row_values(3)[1]
+    for course in courses:
+        if course["UID"] in file:
+            return course['instructorName']
+
+def get_prof_id(file):
+    for course in courses:
+        if course["UID"] in file:
+            return course['instructorId']
 
 def get_course_name(file):
-    # Open the workbook and select the first worksheet
-    with open("./sample_data/courses.csv", 'r') as infile:
-        reader = csv.DictReader(infile)
-        next(reader)
-        for line in reader:
-            if line["UID"] in file:
-                return line["schoolCode"] + line["number"]
+    for course in courses:
+        if course["UID"] in file:
+            return course["departmentCode"] + course["number"]
 
 def is_lecture(file):
-    with open("./sample_data/courses.csv", 'r') as infile:
-        reader = csv.DictReader(infile)
-        next(reader)
-        for line in reader:
-            if line["UID"] in file:
-                return line["type"] == "Lecture"
+    for course in courses:
+        if course["UID"] in file:
+            return course["type"] == "Lecture"
     raise Exception("Course not found in courses.csv")
 
 
@@ -141,29 +141,29 @@ METRICS = ["lecture", "workload", "personality", "overall", "challenge", "learni
 
 
 
-def prof_aggregate():
-    with open("sample_data/sortedbyprof.csv", 'w', newline='') as outfile:
+def prof_aggregate(outpath):
+    with open(outpath, 'w', newline='') as outfile:
         writer = csv.writer(outfile)
-        writer.writerow(["prof"]+METRICS)
+        writer.writerow(["prof_id"]+METRICS)
         sorted = sort_by_prof()
-        prof_name = sorted[0][0]
+        prof_id = sorted[0][0]
         count = 0
         aggs = [0]*6
         for row in sorted:
-            if row[0] == prof_name:
+            if row[0] == prof_id:
                 aggs = list(map(add, aggs, row[2:8]))
                 count = count+1
             else:
-                writer.writerow([prof_name] + [agg/count for agg in aggs])
-                prof_name = row[0]
+                writer.writerow([prof_id] + [agg/count for agg in aggs])
+                prof_id = row[0]
                 aggs = row[2:8]
                 count = 1
-        writer.writerow([prof_name] + [agg / count for agg in aggs])
+        writer.writerow([prof_id] + [agg / count for agg in aggs])
 
 
 
-def course_aggregate():
-    with open("sample_data/sortedbycourse.csv", 'w', newline='') as outfile:
+def course_aggregate(outpath):
+    with open(outpath, 'w', newline='') as outfile:
         writer = csv.writer(outfile)
         writer.writerow(["code"]+METRICS)
         sorted = sort_by_course()
@@ -181,10 +181,10 @@ def course_aggregate():
                 count = 1
         writer.writerow([course_name] + [agg / count for agg in aggs])
 
-def course_prof_aggregate():
-    with open("sample_data/sortedbycourse_prof.csv", 'w', newline='') as outfile:
+def course_prof_aggregate(outpath):
+    with open(outpath, 'w', newline='') as outfile:
         writer = csv.writer(outfile)
-        writer.writerow(["prof","code"]+METRICS)
+        writer.writerow(["prof_id","code"]+METRICS)
         sorted = sort_by_prof_course()
         prof_course = sorted[0][0:2]
         count = 0
@@ -212,21 +212,24 @@ def sort_by_prof_course():
 
 
 if __name__ == '__main__':
-    ratings_dir = './ratings'
+    import sys
+    folder = sys.argv[1]
+    ratings_dir = os.path.join(folder,'ratings')
+    outpath = os.path.join(folder,"ratings.csv")
     ratings = []
-    with open("./sample_data/ratings.csv", 'w', newline='') as outfile:
+    with open(outpath, 'w', newline='') as outfile, \
+        open(os.path.join(folder, 'courses.csv')) as coursesfile:
+        courses = list(csv.DictReader(coursesfile))
         writer = csv.writer(outfile)
-        writer.writerow(["prof","code"]+METRICS)
+        writer.writerow(["prof_id","code"]+METRICS)
         for filename in os.listdir(ratings_dir):
             if is_lecture(filename):
-                file = "./ratings/" + filename
+                file = os.path.join(ratings_dir, filename)
                 metrics = parse_excel(file)
-                prof = get_prof(file)
+                prof_id = get_prof_id(file)
                 course_name = get_course_name(file)
-                writer.writerow([prof] + [course_name] + metrics)
-                ratings.append([prof] + [course_name] + metrics)
-
-    course_aggregate()
-    prof_aggregate()
-    course_prof_aggregate()
-
+                writer.writerow([prof_id] + [course_name] + metrics)
+                ratings.append([prof_id] + [course_name] + metrics)
+        course_aggregate(os.path.join(folder, 'sortedbycourse.csv'))
+        prof_aggregate(os.path.join(folder, 'sortedbyprof.csv'))
+        course_prof_aggregate(os.path.join(folder, 'sortedbycourse_prof.csv'))

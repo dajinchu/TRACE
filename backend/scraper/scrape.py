@@ -4,6 +4,7 @@ import json
 import os
 import time
 from pprint import pprint
+import random
 
 from dotenv import load_dotenv
 
@@ -52,7 +53,7 @@ def download_all_course_excel(courses, folder):
             excel = get_ratings_summary_excel(cinfo)
             with open(path, 'wb') as xlsfile:
                 xlsfile.write(excel)
-                time.sleep(1)
+                time.sleep(random.uniform(1,2))
 
 def get_comments_html(courseinfo):
     """Get comments for a given course"""
@@ -76,7 +77,7 @@ def download_all_comments(courses, folder):
             html = get_comments_html(cinfo)
             with open(path, 'wb') as htmlfile:
                 htmlfile.write(html)
-                time.sleep(1)
+                time.sleep(random.uniform(1,2))
 
 
 
@@ -86,12 +87,3 @@ with open(os.path.join(sys.argv[1],'courses.csv'), 'r') as infile:
     files = list(reader)
     download_all_comments(files, sys.argv[1])
     download_all_course_excel(files, sys.argv[1])
-
-'''
-r = requests.get(url_course_search(2), cookies=cookies, headers=headers)
-pprint(r.json()['data'][0])
-
-https://www.applyweb.com/eval/new/reportbrowser/evaluatedCourses?excludeTA=false&page=2&rpp=15&termId=0
-https://www.applyweb.com/eval/new/reportbrowser/evaluatedCourses?excludeTA=false&page=3&rpp=15&termId=0
-https://www.applyweb.com/eval/new/reportbrowser/evaluatedCourses?excludeTA=false&page=3&rpp=15&schoolCodes=CS&termId=0
-'''
