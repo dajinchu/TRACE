@@ -16,6 +16,7 @@ app.get('*', (req, res) => {
     method: 'POST',
     uri: 'http://35.237.184.11:9200/courses,profs/_search',
     body: {
+      "size": 20,
       "query": {
         "multi_match": {
             "query": query,
