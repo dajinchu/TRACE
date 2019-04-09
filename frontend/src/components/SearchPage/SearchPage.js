@@ -86,7 +86,7 @@ const SearchPage = () => {
   
   useEffect(() => {
     handleInitiateSearch();
-  });
+  }, []);
 
   return (
     <SearchPageContainer>
