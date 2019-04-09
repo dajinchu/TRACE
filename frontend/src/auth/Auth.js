@@ -23,6 +23,7 @@ export default class Auth {
       }
     },
     auth: {
+      audience: 'http://localhost:3000/backend/api',
       redirectUrl: AUTH_CONFIG.callbackUrl,
       responseType: 'token id_token',
       sso: false,
