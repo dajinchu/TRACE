@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import styled  from 'styled-components';
+import styled from 'styled-components';
 import FontAwesome from 'react-fontawesome';
 
 import CourseItem from './CourseItem';
@@ -33,7 +33,6 @@ const SearchBarContainer = styled.div`
 
 const SearchBar = styled.input`
   border: none;
-  /* background-color: ${props => props.visible ? '#C1423E' : '#B12E2A'}; */
   background-color: #C1423E;
   color: #fff;
   font-size: 2em;
@@ -61,7 +60,6 @@ const GithubLink = styled.a`
 
 const SearchPage = () => {
   const [query, setQuery] = useState('');
-  // const [isSearchVisible, setIsSearchVisible] = useState(false);
   const [searchItems, setSearchItems] = useState([]);
 
 
@@ -78,7 +76,6 @@ const SearchPage = () => {
   const searchInput = useRef(null);
 
   const handleInitiateSearch = () => {
-    // setIsSearchVisible(true);
     let interval = setInterval(() => {
       if (searchInput.current != null) {
         searchInput.current.focus()
@@ -91,9 +88,9 @@ const SearchPage = () => {
 
   return (
     <SearchPageContainer>
-        <Title>
-          SEARCH<br />TRACE.
-        </Title>
+      <Title>
+        SEARCH<br />TRACE.
+      </Title>
       <SearchBarContainer>
         <FontAwesome
           name='search'
@@ -105,16 +102,12 @@ const SearchPage = () => {
           }}
           onClick={handleInitiateSearch}
         />
-        {/* {isSearchVisible && */}
-          <SearchBar
-            type="text"
-            ref={searchInput}
-            value={query}
-            // visible={isSearchVisible}
-            // onBlur={() => setIsSearchVisible(false)}
-            onChange={e => setQuery(e.target.value)}
-          />
-        {/* } */}
+        <SearchBar
+          type="text"
+          ref={searchInput}
+          value={query}
+          onChange={e => setQuery(e.target.value)}
+        />
 
       </SearchBarContainer>
       <SearchItemsContainer>
@@ -141,7 +134,7 @@ const SearchPage = () => {
           } else {
             console.error(`Unrecognized search item type "${searchItem.type}".`)
             return null;
-          }
+          };
         })}
       </SearchItemsContainer>
       <Footer>

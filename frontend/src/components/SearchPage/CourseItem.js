@@ -226,7 +226,7 @@ const CourseItem = ({ name, code, professors, metrics, UID }) => {
               </tr>
             </thead>
             <tbody>
-              {newProfessors.map((prof, index) => index < 3 ?
+              {newProfessors.slice(0, 4).map(prof =>
                 <tr key={prof.name}>
                   <EachProf>{prof.name}</EachProf>
                   <TableDetail>
@@ -242,7 +242,6 @@ const CourseItem = ({ name, code, professors, metrics, UID }) => {
                     {getDifferenceIndicator(round(prof.metrics.challenge.difToAverage, 1))}
                   </TableDetail>
                 </tr>
-                : null
               )}
             </tbody>
           </ProfessorTable>

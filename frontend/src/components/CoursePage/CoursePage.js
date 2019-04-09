@@ -94,8 +94,7 @@ const CoursePage = (props) => {
     }).catch(error => {
       console.error(error)
     });
-  }, [data]);
-
+  }, []);
 
   return (
     <CoursePageContainer>
