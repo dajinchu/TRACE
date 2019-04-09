@@ -21,16 +21,19 @@ app.get('*', (req, res) => {
       "size": 20,
       "query": {
         "multi_match": {
-            "query": query,
-            "fields": ["name", "profs.name", "code^3"]
+          "query": query,
+          "fields": ["name", "profs.name", "code^3"]
         }
       },
-        "indices_boost" : [
-          { "profs" : 10 },
-          { "courses" : 1 }
+      "indices_boost" : [
+        { "profs" : 10 },
+        { "courses" : 1 }
       ]
     },
     json: true,
+  };
+  if(!req.user){
+    options.body['_source'] = ['name', 'profs.name', 'code'];
   }
   request(options)
     .then(body => {
