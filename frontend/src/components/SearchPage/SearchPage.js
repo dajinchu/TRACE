@@ -63,12 +63,13 @@ const SearchPage = (props) => {
   const [query, setQuery] = useState('');
   const [searchItems, setSearchItems] = useState([]);
   const { auth } = props;
+  const authed = auth.isAuthenticated();
 
   useEffect(() => {
     if (!auth.isAuthenticated()) {
       auth.login();
     }
-  });
+  }, []);
 
   useDebouncedEffect(() => {
     const headers = new Headers();
@@ -133,6 +134,7 @@ const SearchPage = (props) => {
                 key={searchItem.id}
                 name={searchItem.name}
                 metrics={searchItem.metrics}
+                authed={authed}
               />
             );
           } if (searchItem.type === SEARCH_ITEM_TYPES.COURSE) {
@@ -144,6 +146,7 @@ const SearchPage = (props) => {
                 code={searchItem.code}
                 professors={searchItem.profs}
                 metrics={searchItem.metrics}
+                authed={authed}
               />
             );
           } else {

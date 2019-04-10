@@ -93,7 +93,7 @@ const CoursePage = (props) => {
     if (!auth.isAuthenticated()) {
       auth.login();
     }
-  });
+  }, []);
 
   useEffect(() => {
     const headers = new Headers();

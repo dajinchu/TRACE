@@ -44,7 +44,7 @@ const CourseTitle = styled.div`
   line-height: normal;
   color: #000000;
   max-width: 70%;
-`
+`;
 const CourseCode = styled.div`
   margin: 15px 0px;
   font-size: 18px;
@@ -83,7 +83,7 @@ const ProfessorTable = styled.table`
       }
     }
   } 
-`
+`;
 
 const ProfessorCol = styled.th`
   text-align: left;
@@ -130,6 +130,8 @@ const CourseMetric = styled.div`
   text-align: center;
 `;
 
+const blocked = (style, size = '5px') => styled(style)`filter: blur(${size});`;
+
 const CourseMetricSubtext = styled.div`
   font-size: 14px;
   font-weight: 400;
@@ -141,54 +143,56 @@ const PlusWrapper = styled.span`
   color: rgb(0,97,0);
 `;
 
-const PlusIndicator = ({ value }) => {
-  return (
-    <PlusWrapper>
-      <FA name="arrow-up" style={{ marginRight: '5px' }} />
-      {value}
-    </PlusWrapper>
-  );
-}
+const PlusIndicator = ({ value }) => (
+  <PlusWrapper>
+    <FA name="arrow-up" style={{ marginRight: '5px' }} />
+    {value}
+  </PlusWrapper>
+);
 
 const MinusWrapper = styled.span`
   margin-left: 5px;
   color: rgb(156,0,6);
 `;
 
-const MinusIndicator = ({ value }) => {
-  return (
-    <MinusWrapper>
-      <FA name="arrow-down" style={{ marginRight: '5px' }} />
-      {Math.abs(value)}
-    </MinusWrapper>
-  );
-}
+const MinusIndicator = ({ value }) => (
+  <MinusWrapper>
+    <FA name="arrow-down" style={{ marginRight: '5px' }} />
+    {Math.abs(value)}
+  </MinusWrapper>
+);
 
-const getDifferenceIndicator = difToAverage => {
-  if (Math.abs(difToAverage) < .3) {
+const getDifferenceIndicator = (difToAverage) => {
+  if (Math.abs(difToAverage) < 0.3) {
     return null;
   }
   if (difToAverage > 0) {
     return <PlusIndicator value={difToAverage} />;
-  } else {
-    return <MinusIndicator value={difToAverage} />;
   }
-}
+  return <MinusIndicator value={difToAverage} />;
+};
 
-const CourseItem = ({ name, code, professors, metrics, UID }) => {
-  let newProfessors = professors.map((prof) => ({
-    ...prof,
-    metrics: Object.entries(prof.metrics).reduce((x, y) => {
-      let newMetric = { value: y[1] };
-      newMetric.difToAverage = y[1] - metrics[y[0]];
-      return { ...x, [y[0]]: newMetric };
-    }, {})
-  }));
-  newProfessors.sort(prof => prof.metrics.difToAverage);
+const CourseItem = ({
+  name, code, professors, metrics, UID, authed,
+}) => {
+  let newProfessors = professors;
+  if (authed) {
+    newProfessors = professors.map(prof => ({
+      ...prof,
+      metrics: Object.entries(prof.metrics).reduce((x, y) => {
+        const newMetric = { value: y[1] };
+        newMetric.difToAverage = y[1] - metrics[y[0]];
+        return { ...x, [y[0]]: newMetric };
+      }, {}),
+    }));
+    newProfessors.sort(prof => prof.metrics.difToAverage);
+  }
+  const CourseMetricReal = authed ? CourseMetric : blocked(CourseMetric, '7px');
+  const TableDetailReal = authed ? TableDetail : blocked(TableDetail, '3px');
   return (
     <CourseContainer>
-        <Column>
-      <StyledLink to={`course/${UID}`}>
+      <Column>
+        <StyledLink to={`course/${UID}`}>
           <Header>
             <ItemType>
               COURSE
@@ -203,17 +207,19 @@ const CourseItem = ({ name, code, professors, metrics, UID }) => {
             {code}
           </CourseCode>
           <CourseMetrics>
-            <CourseMetric>
-              {round(metrics.overall, 1)}<br/>
+            <CourseMetricReal>
+              {authed ? round(metrics.overall, 1) : 3.2}
+              <br />
               <CourseMetricSubtext>AVERAGE</CourseMetricSubtext>
-            </CourseMetric>
-            <CourseMetric>
-              {round(metrics.workload, 0)}h
+            </CourseMetricReal>
+            <CourseMetricReal>
+              {authed ? round(metrics.workload, 0) : 3}
+h
               <CourseMetricSubtext>WORKLOAD</CourseMetricSubtext>
-            </CourseMetric>
+            </CourseMetricReal>
           </CourseMetrics>
-      </StyledLink>
-        </Column>
+        </StyledLink>
+      </Column>
       <ProfessorRatings>
         <InnerProfRatings>
           <ProfessorTable>
@@ -226,29 +232,29 @@ const CourseItem = ({ name, code, professors, metrics, UID }) => {
               </tr>
             </thead>
             <tbody>
-              {newProfessors.slice(0, 4).map(prof =>
+              {newProfessors.slice(0, 4).map(prof => (
                 <tr key={prof.name}>
                   <EachProf>{prof.name}</EachProf>
-                  <TableDetail>
-                    {round(prof.metrics.overall.value, 1)}
-                    {getDifferenceIndicator(round(prof.metrics.overall.difToAverage, 1))}
-                  </TableDetail>
-                  <TableDetail>
-                    {round(prof.metrics.learning.value, 1)}
-                    {getDifferenceIndicator(round(prof.metrics.learning.difToAverage, 1))}
-                  </TableDetail>
-                  <TableDetail>
-                    {round(prof.metrics.challenge.value, 1)}
-                    {getDifferenceIndicator(round(prof.metrics.challenge.difToAverage, 1))}
-                  </TableDetail>
+                  <TableDetailReal>
+                    {authed ? round(prof.metrics.overall.value, 1) : 3.3}
+                    {authed ? getDifferenceIndicator(round(prof.metrics.overall.difToAverage, 1)) : null}
+                  </TableDetailReal>
+                  <TableDetailReal>
+                    {authed ? round(prof.metrics.learning.value, 1) : 3.3}
+                    {authed ? getDifferenceIndicator(round(prof.metrics.learning.difToAverage, 1)) : null}
+                  </TableDetailReal>
+                  <TableDetailReal>
+                    {authed ? round(prof.metrics.challenge.value, 1) : 3.3}
+                    {authed ? getDifferenceIndicator(round(prof.metrics.challenge.difToAverage, 1)) : null}
+                  </TableDetailReal>
                 </tr>
-              )}
+              ))}
             </tbody>
           </ProfessorTable>
         </InnerProfRatings>
       </ProfessorRatings>
     </CourseContainer>
   );
-}
+};
 
 export default CourseItem;
