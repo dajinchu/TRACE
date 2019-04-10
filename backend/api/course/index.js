@@ -16,7 +16,14 @@ app.get('*', (req, res) => {
     return;
   }
   filter = req.user ? "" : "?_source_excludes=*comments,*metrics";
-  request({json:true,uri:"http://35.207.22.31:9200/courses/_doc/"+UID+filter})
+  request({
+    json:true,
+    uri:"http://trace.sandboxneu.com/courses/_doc/"+UID+filter,
+    auth: {
+      user: process.env.es_user,
+      pass: process.env.es_pass,
+    },
+  })
     .then(body => {
       res.json(body._source);
     })

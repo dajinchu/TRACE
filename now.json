@@ -11,5 +11,9 @@
     {"src": "/backend/api/(.*)", "dest": "/backend/api/$1" },
     {"src": "/.*", "dest": "/frontend/index.html"}
   ],
-  "alias": ["trace.dajinchu.now.sh"]
+  "alias": ["trace.dajinchu.now.sh"],
+  "env": {
+    "es_user": "@es_user",
+    "es_pass": "@es_pass"
+  }
 }

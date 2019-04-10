@@ -16,7 +16,11 @@ app.get('*', (req, res) => {
   }
   options = {
     method: 'POST',
-    uri: 'http://35.207.22.31:9200/courses,profs/_search',
+    uri: 'http://trace.sandboxneu.com/courses,profs/_search',
+    auth: {
+      user: process.env.es_user,
+      pass: process.env.es_pass,
+    },
     body: {
       "size": 20,
       "query": {
@@ -40,6 +44,7 @@ app.get('*', (req, res) => {
       res.json(body.hits.hits.map(hit=>hit._source));
     })
     .catch(err =>{ 
+      console.log(err);
       res.sendStatus(500);
     });
 });
