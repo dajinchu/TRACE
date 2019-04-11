@@ -6,7 +6,7 @@ import CourseItem from './CourseItem';
 import ProfessorItem from './ProfessorItem';
 import { useDebouncedEffect } from '../../utils/fetchingUtils';
 
-export const BACKEND_BASE_URL = '/backend/api';
+export const BACKEND_BASE_URL = 'https://trace.dajinchu.now.sh/backend/api';
 export const SEARCH_ITEM_TYPES = {
   PROF: 'prof',
   COURSE: 'course',
@@ -49,6 +49,18 @@ const SearchItemsContainer = styled.div`
   }
 `;
 
+const LoginWarning = styled.div`
+  cursor: pointer;
+  padding: 20px 30px;
+  display: flex;
+  background: #ede49e;
+  box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.5);
+  border-radius: 5px;
+  &:hover {
+    background: #E6CD79;
+  }
+`;
+
 const Footer = styled.div`
   color: #fff;
   padding: 20px 14%;
@@ -63,12 +75,7 @@ const SearchPage = (props) => {
   const [query, setQuery] = useState('');
   const [searchItems, setSearchItems] = useState([]);
   const { auth } = props;
-
-  useEffect(() => {
-    if (!auth.isAuthenticated()) {
-      auth.login();
-    }
-  });
+  const authed = auth.isAuthenticated();
 
   useDebouncedEffect(() => {
     const headers = new Headers();
@@ -94,7 +101,7 @@ const SearchPage = (props) => {
       }
     }, 100);
   };
-  
+
   useEffect(() => {
     handleInitiateSearch();
   }, []);
@@ -123,16 +130,31 @@ const SearchPage = (props) => {
           value={query}
           onChange={e => setQuery(e.target.value)}
         />
-
       </SearchBarContainer>
       <SearchItemsContainer>
+        {(searchItems && searchItems.length && !authed)
+          ? (
+            <LoginWarning onClick={auth.login}>
+              <FontAwesome
+                name="sign-in"
+                style={{
+                  cursor: 'pointer',
+                  paddingRight: '5px',
+                }}
+              />
+                Sign in
+              to see ratings and comments
+            </LoginWarning>
+          ) : null
+        }
         {searchItems.map((searchItem) => {
           if (searchItem.type === SEARCH_ITEM_TYPES.PROF) {
             return (
               <ProfessorItem
-                key={searchItem.id}
+                key={searchItem.UID}
                 name={searchItem.name}
                 metrics={searchItem.metrics}
+                authed={authed}
               />
             );
           } if (searchItem.type === SEARCH_ITEM_TYPES.COURSE) {
@@ -144,12 +166,12 @@ const SearchPage = (props) => {
                 code={searchItem.code}
                 professors={searchItem.profs}
                 metrics={searchItem.metrics}
+                authed={authed}
               />
             );
-          } else {
-            console.error(`Unrecognized search item type "${searchItem.type}".`)
-            return null;
           }
+          console.error(`Unrecognized search item type "${searchItem.type}".`);
+          return null;
         })}
       </SearchItemsContainer>
       <Footer>
