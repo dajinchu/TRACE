@@ -79,7 +79,7 @@ const SearchPage = (props) => {
 
   useDebouncedEffect(() => {
     const headers = new Headers();
-    if (localStorage.getItem('access_token')) {
+    if (auth.isAuthenticated() && localStorage.getItem('access_token')) {
       headers.append('Authorization', `Bearer ${localStorage.getItem('access_token')}`);
     }
     fetch(
