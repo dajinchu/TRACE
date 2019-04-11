@@ -34,7 +34,7 @@ const Professor = ({ name, metrics }) => {
       {name}
     </ProfessorTitle>
     <ProfessorMetricsContainer>
-      {Object.entries(metrics).map(metric => {
+      {Object.entries(metrics || {}).map(metric => {
         return (
           <Column key={metric[0] + metric[1]}>
             <div>{capitalize(metric[0])}</div>

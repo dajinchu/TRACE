@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom';
 
 import { round } from '../../utils/parsingUtils';
 
+const COURSE_ITEM_LIST_LENGTH = 4;
+
 const StyledLink = styled(Link)`
   text-decoration: none;
   margin-bottom: 15px;
@@ -130,7 +132,7 @@ const CourseMetric = styled.div`
   text-align: center;
 `;
 
-const blocked = (style, size = '5px') => styled(style)`filter: blur(${size});`;
+const blocked = (component, size = '5px') => styled(component)`filter: blur(${size});`;
 
 const CourseMetricSubtext = styled.div`
   font-size: 14px;
@@ -142,6 +144,8 @@ const PlusWrapper = styled.span`
   margin-left: 5px;
   color: rgb(0,97,0);
 `;
+
+const fakeMetric = (min = 1, max = 5) => min + (max - min) * Math.random();
 
 const PlusIndicator = ({ value }) => (
   <PlusWrapper>
@@ -208,12 +212,12 @@ const CourseItem = ({
           </CourseCode>
           <CourseMetrics>
             <CourseMetricReal>
-              {authed ? round(metrics.overall, 1) : 3.2}
+              {round(authed ? metrics.overall : fakeMetric(), 1)}
               <br />
               <CourseMetricSubtext>AVERAGE</CourseMetricSubtext>
             </CourseMetricReal>
             <CourseMetricReal>
-              {authed ? round(metrics.workload, 0) : 3}
+              {round(authed ? metrics.workload : fakeMetric(4, 20), 0)}
 h
               <CourseMetricSubtext>WORKLOAD</CourseMetricSubtext>
             </CourseMetricReal>
@@ -232,19 +236,19 @@ h
               </tr>
             </thead>
             <tbody>
-              {newProfessors.slice(0, 4).map(prof => (
+              {newProfessors.slice(0, COURSE_ITEM_LIST_LENGTH).map(prof => (
                 <tr key={prof.name}>
                   <EachProf>{prof.name}</EachProf>
                   <TableDetailReal>
-                    {authed ? round(prof.metrics.overall.value, 1) : 3.3}
+                    {round(authed ? prof.metrics.overall.value : fakeMetric(), 1)}
                     {authed ? getDifferenceIndicator(round(prof.metrics.overall.difToAverage, 1)) : null}
                   </TableDetailReal>
                   <TableDetailReal>
-                    {authed ? round(prof.metrics.learning.value, 1) : 3.3}
+                    {round(authed ? prof.metrics.learning.value : fakeMetric(), 1)}
                     {authed ? getDifferenceIndicator(round(prof.metrics.learning.difToAverage, 1)) : null}
                   </TableDetailReal>
                   <TableDetailReal>
-                    {authed ? round(prof.metrics.challenge.value, 1) : 3.3}
+                    {round(authed ? prof.metrics.challenge.value : fakeMetric(), 1)}
                     {authed ? getDifferenceIndicator(round(prof.metrics.challenge.difToAverage, 1)) : null}
                   </TableDetailReal>
                 </tr>
