@@ -1,14 +1,14 @@
 const express = require('express');
-const cors = require('cors');
 const request = require('request-promise-native');
 const jwtCheck = require('../auth.js');
+const router = express.Router();
 
-const app = express();
-app.use(cors());
-app.use(jwtCheck);
-module.exports = app;
+router.use(jwtCheck);
+module.exports = router;
 
-app.get('*', (req, res) => {
+router.get('/', (req, res) => {
+  console.log("search request");
+  console.time("requeset ES");
   const query = req.query.q;
   if(typeof query == 'undefined' || query == ''){
     res.json([]);
@@ -41,7 +41,10 @@ app.get('*', (req, res) => {
   }
   request(options)
     .then(body => {
+      console.timeEnd("requeset ES");
+      console.time("respond");
       res.json(body.hits.hits.map(hit=>hit._source));
+      console.timeEnd("respond");
     })
     .catch(err =>{ 
       console.log(err);

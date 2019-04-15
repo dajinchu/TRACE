@@ -6,7 +6,7 @@ import CourseItem from './CourseItem';
 import ProfessorItem from './ProfessorItem';
 import { useDebouncedEffect } from '../../utils/fetchingUtils';
 
-export const BACKEND_BASE_URL = 'https://trace.dajinchu.now.sh/backend/api';
+export const BACKEND_BASE_URL = '/backend/api';
 export const SEARCH_ITEM_TYPES = {
   PROF: 'prof',
   COURSE: 'course',
