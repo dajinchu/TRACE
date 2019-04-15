@@ -16,7 +16,7 @@ app.get('*', (req, res) => {
   }
   options = {
     method: 'POST',
-    uri: 'http://trace.sandboxneu.com/courses,profs/_search',
+    uri: 'https://trace.sandboxneu.com/courses,profs/_search',
     auth: {
       user: process.env.es_user,
       pass: process.env.es_pass,
