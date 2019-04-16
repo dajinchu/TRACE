@@ -8,7 +8,7 @@ module.exports = router;
 
 router.get('/', (req, res) => {
   console.log("search request");
-  console.time("requeset ES");
+  console.time("respond");
   const query = req.query.q;
   if(typeof query == 'undefined' || query == ''){
     res.json([]);
@@ -41,8 +41,6 @@ router.get('/', (req, res) => {
   }
   request(options)
     .then(body => {
-      console.timeEnd("requeset ES");
-      console.time("respond");
       res.json(body.hits.hits.map(hit=>hit._source));
       console.timeEnd("respond");
     })

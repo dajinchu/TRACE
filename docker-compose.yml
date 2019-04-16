@@ -3,13 +3,19 @@ version: '3.2'
 services:
   web:
     build: ./frontend
-    environment:
-      - NODE_ENV=production
     command: yarn start
     ports:
       - 3000:3000
     volumes:
       - ./frontend:/usr/src/app
-      - node_modules:/usr/src/app/node_modules
+      - web_modules:/usr/src/app/node_modules
+  api:
+    build: ./backend/api
+    command: npm run dev
+    ports:
+      - 3001:3001
+    volumes:
+      - ./backend/api:/usr/src/app
+      - /usr/src/app/node_modules
 volumes:
-  node_modules:
+  web_modules:
