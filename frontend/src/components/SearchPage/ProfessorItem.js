@@ -126,7 +126,10 @@ const ProfessorItem = ({ name, email, homepage, metrics }) => {
       </LeftColumn>
       <RightColumn>
         {displayMetrics.map(metric => {
-          const [name, value] = metric;
+          let [name, value] = metric;
+          if (name === 'personality') {
+            name = 'personability';
+          }
           return (
             <Metric
               name={name}
