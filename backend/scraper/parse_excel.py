@@ -56,22 +56,23 @@ def parse_excel(file):
     workload['1'] = workload_row[7]
     question_list.append(workload)
 
-    lecture_effectiveness_vals = ["lectures", "in-class", "communication skills", "communication", "preparation",
-                                  "effective use of time", "feedback", "action to help understand"]
-    workload_vals = ["hours devoted to course"]
-    personality_vals = ["communication skills", "feedback", "respect", "action to help understand", "availability",
-                        "enthusiasm"]
-    overall_vals = ["recommendation", "overall rating of teaching"]
-    challenge_vals = ["challenging", "performance evaluation"]
-    learning_value_vals = ["fieldwork", "lectures", "in-class", "learning amount", "application", "feedback",
-                           "action to help understand"]
+    
+#    lecture_effectiveness_vals = ["lectures", "in-class", "communication skills", "communication", "preparation",
+#                                  "effective use of time", "feedback", "action to help understand"]
+#    workload_vals = ["hours devoted to course"]
+#    personality_vals = ["communication skills", "feedback", "respect", "action to help understand", "availability",
+#                        "enthusiasm"]
+#    overall_vals = ["recommendation", "overall rating of teaching"]
+#    challenge_vals = ["challenging", "performance evaluation"]
+#    learning_value_vals = ["fieldwork", "lectures", "in-class", "learning amount", "application", "feedback",
+#                           "action to help understand"]
 
-    lecture_effectiveness = 0
-    workload = 0
-    personality = 0
-    overall = 0
-    challenge = 0
-    learning_value = 0
+#    lecture_effectiveness = 0
+#    workload = 0
+#    personality = 0
+#    overall = 0
+#    challenge = 0
+#    learning_value = 0
 
     for dimension in question_list:
         if (dimension["5"] + dimension["4"] + dimension["3"] + dimension["2"] + dimension["1"]) != 0:
@@ -79,12 +80,12 @@ def parse_excel(file):
                    dimension["1"]) /(dimension["5"] + dimension["4"] + dimension["3"] + dimension["2"] + dimension["1"])
         else:
             avg = 0
-        if dimension["quest-abbrv"] in lecture_effectiveness_vals:
-            lecture_effectiveness += avg
-        if dimension["quest-abbrv"] in personality_vals:
-            personality += avg
-        if dimension["quest-abbrv"] in overall_vals:
-            overall += avg
+        #if dimension["quest-abbrv"] in lecture_effectiveness_vals:
+        #    lecture_effectiveness += avg
+        #if dimension["quest-abbrv"] in personality_vals:
+        #    personality += avg
+        #if dimension["quest-abbrv"] in overall_vals:
+        #    overall += avg
         if dimension["quest-abbrv"] in challenge_vals:
             challenge += avg
         if dimension["quest-abbrv"] in learning_value_vals:
@@ -106,14 +107,15 @@ def parse_excel(file):
             else:
                 workload = -1
 
-    lecture_effectiveness = lecture_effectiveness / len(lecture_effectiveness_vals)
-    workload = workload / len(workload_vals)
-    personality = personality / len(personality_vals)
-    overall = overall / len(overall_vals)
-    challenge = challenge / len(challenge_vals)
-    learning_value = learning_value / len(learning_value_vals)
+#    lecture_effectiveness = lecture_effectiveness / len(lecture_effectiveness_vals)
+#    workload = workload / len(workload_vals)
+#    personality = personality / len(personality_vals)
+#    overall = overall / len(overall_vals)
+#    challenge = challenge / len(challenge_vals)
+#    learning_value = learning_value / len(learning_value_vals)
 
-    return [lecture_effectiveness, workload, personality, overall, challenge, learning_value]
+#    return [lecture_effectiveness, workload, personality, overall, challenge, learning_value]
+    return []
 
 def get_prof(file):
     for course in courses:
