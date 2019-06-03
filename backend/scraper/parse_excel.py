@@ -195,23 +195,25 @@ def sort_by_prof_course():
 
 if __name__ == '__main__':
     import sys
+    import json
     folder = sys.argv[1]
     ratings_dir = os.path.join(folder,'ratings')
-    outpath = os.path.join(folder,"ratings.csv")
+    outpath = os.path.join(folder,"ratings.json")
     ratings = []
     with open(outpath, 'w', newline='') as outfile, \
         open(os.path.join(folder, 'courses.csv')) as coursesfile:
         courses = list(csv.DictReader(coursesfile))
-        writer = csv.writer(outfile)
-        writer.writerow(["prof_id","code"]+METRICS)
         for filename in os.listdir(ratings_dir):
             if is_lecture(filename):
                 file = os.path.join(ratings_dir, filename)
-                metrics = list(parse_excel(file).values())
+                metrics = parse_excel(file)
                 prof_id = get_prof_id(file)
                 course_name = get_course_name(file)
-                writer.writerow([prof_id] + [course_name] + metrics)
-                ratings.append([prof_id] + [course_name] + metrics)
-        course_aggregate(os.path.join(folder, 'sortedbycourse.csv'))
-        prof_aggregate(os.path.join(folder, 'sortedbyprof.csv'))
-        course_prof_aggregate(os.path.join(folder, 'sortedbycourse_prof.csv'))
+                ratings.append({"prof_id":prof_id, "code":course_name, "metrics": metrics})
+        json.dump(ratings, outfile)
+        """
+        course_aggregate(os.path.join(folder, 'sortedbycourse.json'))
+        prof_aggregate(os.path.join(folder, 'sortedbyprof.json'))
+        course_prof_aggregate(os.path.join(folder, 'sortedbycourse_prof.json'))
+
+"""
