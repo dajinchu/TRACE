@@ -23,7 +23,7 @@ def login(username, password):
 
     try:
         # Wait for javascript redirect to happen
-        WebDriverWait(driver, 5).until(EC.title_contains("My Evaluations"))
+        WebDriverWait(driver, 10).until(EC.title_contains("My Evaluations"))
         cookies = dict()
         cookies["sid"] = driver.get_cookie("sid")["value"]
         cookies["sdbid"] = driver.get_cookie("sdbid")["value"]
@@ -34,7 +34,7 @@ def login(username, password):
 
 cookies = {}
 headers = {
-    'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0'
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:67.0) Gecko/20100101 Firefox/67.0'
 }
 def auth_get(*args, **kwargs):
     global cookies

@@ -23,7 +23,11 @@ def get_instructor_name(prof_id):
 def get_course_name(code):
     return next(c['name'] for c in courses if c['departmentCode']+c['number']==code)
 
-METRICS = ["lecture", "workload", "personality", "overall", "challenge", "learning"]
+METRICS = ["syllabus", "textbook", "online materials", "fieldwork", "lectures", "in-class", "classroom technology",
+"challenging", "learning amount", "application", "expression", "analysis", "communication skills", "communication",
+"objectives", "syllabus", "preparation", "effective use of time", "feedback", "performance evaluation", "recommendation",
+"respect", "action to help understand", "availability", "enthusiasm", "overall rating of teaching", "hours devoted to course"]
+
 def just_metrics(metric_row):
     return {key:metric_row[key] for key in METRICS}
 
