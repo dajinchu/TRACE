@@ -3,14 +3,14 @@ import os
 import csv
 import json
 
-es = Elasticsearch([{'host': '35.237.184.11', 'port': 9200}])
+es = Elasticsearch(['https://trace.sandboxneu.com/'], http_auth=('zeit', 'yIr3Gz2PW7XM'))
 
 import sys
 folder = sys.argv[1]
 COURSES = os.path.join(folder, 'courses.csv')
-AGG_COURSE = os.path.join(folder, 'sortedbycourse.csv')
-AGG_PROF = os.path.join(folder, 'sortedbyprof.csv')
-AGG_PROF_COURSE = os.path.join(folder, 'sortedbycourse_prof.csv')
+AGG_COURSE = os.path.join(folder, 'sortedbycourse.json')
+AGG_PROF = os.path.join(folder, 'sortedbyprof.json')
+AGG_PROF_COURSE = os.path.join(folder, 'sortedbycourse_prof.json')
 COMMENTS_COURSE = os.path.join(folder, 'course_comments.json')
 COMMENTS_PROF = os.path.join(folder, 'prof_comments.json')
 COMMENTS_PROF_COURSE = os.path.join(folder, 'pc_comments.json')
@@ -29,15 +29,14 @@ METRICS = ["syllabus", "textbook", "online materials", "fieldwork", "lectures", 
 "respect", "action to help understand", "availability", "enthusiasm", "overall rating of teaching", "hours devoted to course"]
 
 def just_metrics(metric_row):
-    return {key:metric_row[key] for key in METRICS}
+    return metric_row['metrics']
 
 def index_courses():
     # get metrics for the courses, with detailed info on the profs_course for each course
     for metrics in agg_course:
         code = metrics['code']
         name = get_course_name(code)
-        avg = dict(metrics)
-        avg.pop('code')
+        avg = metrics['metrics']
 
         profs = [{'UID': pc_metric['prof_id'],
                   'name': get_instructor_name(pc_metric['prof_id']),
@@ -92,9 +91,9 @@ with open(COURSES, 'r') as coursesfile,\
         open(COMMENTS_PROF, 'r') as cp_file,\
         open(COMMENTS_PROF_COURSE, 'r') as cpc_file:
     courses = list(csv.DictReader(coursesfile))
-    agg_course = list(csv.DictReader(agg_coursefile))
-    agg_prof = list(csv.DictReader(agg_proffile))
-    agg_prof_course = list(csv.DictReader(agg_prof_coursefile))
+    agg_course = json.load(agg_coursefile)
+    agg_prof = json.load(agg_proffile)
+    agg_prof_course = json.load(agg_prof_coursefile)
     comments_course = json.load(cc_file)
     comments_prof = json.load(cp_file)
     comments_prof_course = json.load(cpc_file)

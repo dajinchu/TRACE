@@ -3,10 +3,11 @@ import os
 from statistics import median
 
 import xlrd
-from collections import OrderedDict
+from collections import Counter
 import json
 
 from operator import add
+from itertools import groupby
 
 def parse_excel(file):
     # Open the workbook and select the first worksheet
@@ -121,76 +122,30 @@ METRICS = ["syllabus", "textbook", "online materials", "fieldwork", "lectures", 
 "objectives", "syllabus", "preparation", "effective use of time", "feedback", "performance evaluation", "recommendation",
 "respect", "action to help understand", "availability", "enthusiasm", "overall rating of teaching", "hours devoted to course"]
 
+def aggregate_by(key):
+    output = []
+    sorted_ratings = sorted(ratings, key=key)
+    # group the ratings by same prof/course
+    grouped_ratings = groupby(sorted_ratings, key=key)
 
-
-def prof_aggregate(outpath):
-    with open(outpath, 'w', newline='') as outfile:
-        writer = csv.writer(outfile)
-        writer.writerow(["prof_id"]+METRICS)
-        sorted = sort_by_prof()
-        prof_id = sorted[0][0]
-        count = 0
-        aggs = [0]*6
-        for row in sorted:
-            if row[0] == prof_id:
-                aggs = list(map(add, aggs, row[2:8]))
-                count = count+1
-            else:
-                writer.writerow([prof_id] + [agg/count for agg in aggs])
-                prof_id = row[0]
-                aggs = row[2:8]
-                count = 1
-        writer.writerow([prof_id] + [agg / count for agg in aggs])
-
-
-
-def course_aggregate(outpath):
-    with open(outpath, 'w', newline='') as outfile:
-        writer = csv.writer(outfile)
-        writer.writerow(["code"]+METRICS)
-        sorted = sort_by_course()
-        course_name = sorted[0][1]
-        count = 0
-        aggs = [0]*6
-        for row in sorted:
-            if row[1] == course_name:
-                aggs = list(map(add, aggs, row[2:8]))
-                count = count+1
-            else:
-                writer.writerow([course_name] + [agg/count for agg in aggs])
-                course_name = row[1]
-                aggs = row[2:8]
-                count = 1
-        writer.writerow([course_name] + [agg / count for agg in aggs])
-
-def course_prof_aggregate(outpath):
-    with open(outpath, 'w', newline='') as outfile:
-        writer = csv.writer(outfile)
-        writer.writerow(["prof_id","code"]+METRICS)
-        sorted = sort_by_prof_course()
-        prof_course = sorted[0][0:2]
-        count = 0
-        aggs = [0]*6
-        for row in sorted:
-            if row[0:2] == prof_course:
-                aggs = list(map(add, aggs, row[2:8]))
-                count = count+1
-            else:
-                writer.writerow(row[0:2] + [agg/count for agg in aggs])
-                prof_course = row[0:2]
-                aggs = row[2:8]
-                count = 1
-        writer.writerow(row[0:2] + [agg / count for agg in aggs])
+    for k, g in grouped_ratings:
+        aggs = Counter({}) # Aggregated answers
+        sections = list(g)
+        for section in sections:
+            aggs += Counter(section['metrics'])
+        sections[0]['metrics'] = {k: v/len(sections) for k,v in aggs.items()}
+        output.append(sections[0])
+    return output
 
 
 def sort_by_prof():
-    return sorted(ratings, key=lambda row: row[0])
+    return sorted(ratings, key=lambda row: row['prof_id'])
 
 def sort_by_course():
-    return sorted(ratings, key=lambda row: row[1])
+    return sorted(ratings, key=lambda row: row['code'])
 
 def sort_by_prof_course():
-    return sorted(ratings, key=lambda row: (row[0], row[1]))
+    return sorted(ratings, key=lambda row: (row['prof_id'], row['code']))
 
 
 if __name__ == '__main__':
@@ -199,9 +154,15 @@ if __name__ == '__main__':
     folder = sys.argv[1]
     ratings_dir = os.path.join(folder,'ratings')
     outpath = os.path.join(folder,"ratings.json")
+    sortcp_path = os.path.join(folder,"sortedbycourse_prof.json")
+    sortc_path = os.path.join(folder,"sortedbycourse.json")
+    sortp_path = os.path.join(folder,"sortedbyprof.json")
     ratings = []
     with open(outpath, 'w', newline='') as outfile, \
-        open(os.path.join(folder, 'courses.csv')) as coursesfile:
+        open(os.path.join(folder, 'courses.csv')) as coursesfile, \
+        open(sortcp_path, 'w', newline='') as sortcp_file, \
+        open(sortc_path, 'w', newline='') as sortc_file, \
+        open(sortp_path, 'w', newline='') as sortp_file:
         courses = list(csv.DictReader(coursesfile))
         for filename in os.listdir(ratings_dir):
             if is_lecture(filename):
@@ -211,9 +172,7 @@ if __name__ == '__main__':
                 course_name = get_course_name(file)
                 ratings.append({"prof_id":prof_id, "code":course_name, "metrics": metrics})
         json.dump(ratings, outfile)
-        """
-        course_aggregate(os.path.join(folder, 'sortedbycourse.json'))
-        prof_aggregate(os.path.join(folder, 'sortedbyprof.json'))
-        course_prof_aggregate(os.path.join(folder, 'sortedbycourse_prof.json'))
 
-"""
+        json.dump(aggregate_by( lambda section: (section['prof_id'], section['code'])) , sortcp_file)
+        json.dump(aggregate_by( lambda section: section['code']) , sortc_file)
+        json.dump(aggregate_by( lambda section: section['prof_id']) , sortp_file)
