@@ -117,11 +117,6 @@ def is_lecture(file):
     raise Exception("Course not found in courses.csv")
 
 
-METRICS = ["syllabus", "textbook", "online materials", "fieldwork", "lectures", "in-class", "classroom technology",
-"challenging", "learning amount", "application", "expression", "analysis", "communication skills", "communication",
-"objectives", "syllabus", "preparation", "effective use of time", "feedback", "performance evaluation", "recommendation",
-"respect", "action to help understand", "availability", "enthusiasm", "overall rating of teaching", "hours devoted to course"]
-
 def aggregate_by(key):
     output = []
     sorted_ratings = sorted(ratings, key=key)
@@ -130,23 +125,14 @@ def aggregate_by(key):
 
     for k, g in grouped_ratings:
         aggs = Counter({}) # Aggregated answers
+        counts = Counter({}) # Number of times each question has appeared
         sections = list(g)
         for section in sections:
             aggs += Counter(section['metrics'])
-        sections[0]['metrics'] = {k: v/len(sections) for k,v in aggs.items()}
+            counts += Counter({k:1 for k in section['metrics']})
+        sections[0]['metrics'] = {k: v/counts[k] for k,v in aggs.items()}
         output.append(sections[0])
     return output
-
-
-def sort_by_prof():
-    return sorted(ratings, key=lambda row: row['prof_id'])
-
-def sort_by_course():
-    return sorted(ratings, key=lambda row: row['code'])
-
-def sort_by_prof_course():
-    return sorted(ratings, key=lambda row: (row['prof_id'], row['code']))
-
 
 if __name__ == '__main__':
     import sys
