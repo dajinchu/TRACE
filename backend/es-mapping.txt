@@ -1,6 +1,5 @@
 {
 	"mappings": {
-		"_doc": {
 			"properties": {
           "UID": {
             "type": "text",

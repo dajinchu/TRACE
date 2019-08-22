@@ -2,8 +2,13 @@ from elasticsearch import Elasticsearch
 import os
 import csv
 import json
+from dotenv import load_dotenv
 
-es = Elasticsearch(['https://trace.sandboxneu.com/'], http_auth=('zeit', 'yIr3Gz2PW7XM'))
+load_dotenv()
+USERNAME = os.getenv('ES_USER')
+PASSWORD = os.getenv('ES_PASS')
+
+es = Elasticsearch(['https://trace.sandboxneu.com/'], http_auth=(USERNAME, PASSWORD))
 
 import sys
 folder = sys.argv[1]
