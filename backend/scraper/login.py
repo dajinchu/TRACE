@@ -8,8 +8,8 @@ import requests
 import os
 
 load_dotenv()
-USERNAME = os.getenv('NEU_USER')
-PASSWORD = os.getenv('NEU_PASS')
+USERNAME = os.getenv('neu_user')
+PASSWORD = os.getenv('neu_pass')
 
 def login(username, password):
     driver = webdriver.Firefox()
