@@ -73,7 +73,7 @@ const GithubLink = styled.a`
 `;
 
 const SearchPage = (props) => {
-  const [query, setQuery] = useQueryParam('q', StringParam);
+  const [query = '', setQuery] = useQueryParam('q', StringParam);
   const [searchItems, setSearchItems] = useState([]);
   const { auth } = props;
   const authed = auth.isAuthenticated();
