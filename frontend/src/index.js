@@ -15,7 +15,7 @@ const auth = new Auth();
 
 const App = () => (
   <Router>
-    <QueryParamProvider>
+    <QueryParamProvider ReactRouterRoute={Route}>
       <CSSReset />
       <GlobalStyle />
       <Route path="/" exact render={props => <SearchPage {...props} auth={auth} />} />
