@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { QueryParamProvider } from 'use-query-params';
 
 import './index.css';
 import 'font-awesome/css/font-awesome.min.css';
@@ -14,10 +15,12 @@ const auth = new Auth();
 
 const App = () => (
   <Router>
-    <CSSReset />
-    <GlobalStyle />
-    <Route path="/" exact render={props => <SearchPage {...props} auth={auth} />} />
-    <Route path="/course/:UID" exact render={props => <CoursePage {...props} auth={auth} />} />
+    <QueryParamProvider>
+      <CSSReset />
+      <GlobalStyle />
+      <Route path="/" exact render={props => <SearchPage {...props} auth={auth} />} />
+      <Route path="/course/:UID" exact render={props => <CoursePage {...props} auth={auth} />} />
+    </QueryParamProvider>
   </Router>
 );
 
