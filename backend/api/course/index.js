@@ -2,13 +2,12 @@ const express = require('express');
 const cors = require('cors')
 const request = require('request-promise-native');
 const jwtCheck = require('../auth.js');
+const router = express.Router();
 
-const app = express();
-app.use(cors())
-app.use(jwtCheck);
-module.exports = app;
+router.use(jwtCheck);
+module.exports = router;
 
-app.get('*', (req, res) => {
+router.get('/', (req, res) => {
   const UID = req.query.id;
   console.log(UID);
   if(typeof UID == 'undefined' || UID == ''){
@@ -31,5 +30,3 @@ app.get('*', (req, res) => {
       res.sendStatus(500);
     });
 });
-
-app.listen(3001)
