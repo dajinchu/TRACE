@@ -5,8 +5,8 @@ import json
 from dotenv import load_dotenv
 
 load_dotenv()
-USERNAME = os.getenv('ES_USER')
-PASSWORD = os.getenv('ES_PASS')
+USERNAME = os.getenv('es_user')
+PASSWORD = os.getenv('es_pass')
 
 es = Elasticsearch(['https://trace.sandboxneu.com/'], http_auth=(USERNAME, PASSWORD))
 

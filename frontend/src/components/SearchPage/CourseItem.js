@@ -261,4 +261,4 @@ h
   );
 };
 
-export default CourseItem;
+export default React.memo(CourseItem);

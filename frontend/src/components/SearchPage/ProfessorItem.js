@@ -159,4 +159,4 @@ const ProfessorItem = ({
   );
 };
 
-export default ProfessorItem;
+export default React.memo(ProfessorItem);

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import FontAwesome from 'react-fontawesome';
+import { useQueryParam, StringParam } from 'use-query-params';
 
 import CourseItem from './CourseItem';
 import ProfessorItem from './ProfessorItem';
@@ -72,7 +73,7 @@ const GithubLink = styled.a`
 `;
 
 const SearchPage = (props) => {
-  const [query, setQuery] = useState('');
+  const [query = '', setQuery] = useQueryParam('q', StringParam);
   const [searchItems, setSearchItems] = useState([]);
   const { auth } = props;
   const authed = auth.isAuthenticated();
