@@ -212,12 +212,12 @@ const CourseItem = ({
           </CourseCode>
           <CourseMetrics>
             <CourseMetricReal>
-              {round(authed ? metrics.overall : fakeMetric(), 1)}
+              {round(authed ? metrics['overall rating of teaching'] : fakeMetric(), 1)}
               <br />
               <CourseMetricSubtext>AVERAGE</CourseMetricSubtext>
             </CourseMetricReal>
             <CourseMetricReal>
-              {round(authed ? metrics.workload : fakeMetric(4, 20), 0)}
+              {round(authed ? metrics['hours devoted to course'] : fakeMetric(4, 20), 0)}
 h
               <CourseMetricSubtext>WORKLOAD</CourseMetricSubtext>
             </CourseMetricReal>
@@ -232,7 +232,7 @@ h
                 <ProfessorCol>PROFESSOR</ProfessorCol>
                 <TableHead>OVR</TableHead>
                 <TableHead>LRN</TableHead>
-                <TableHead>DIF</TableHead>
+                <TableHead>CLR</TableHead>
               </tr>
             </thead>
             <tbody>
@@ -240,16 +240,16 @@ h
                 <tr key={prof.name}>
                   <EachProf>{prof.name}</EachProf>
                   <TableDetailReal>
-                    {round(authed ? prof.metrics.overall.value : fakeMetric(), 1)}
-                    {authed ? getDifferenceIndicator(round(prof.metrics.overall.difToAverage, 1)) : null}
+                    {round(authed ? prof.metrics['overall rating of teaching'].value : fakeMetric(), 1)}
+                    {authed ? getDifferenceIndicator(round(prof.metrics['overall rating of teaching'].difToAverage, 1)) : null}
                   </TableDetailReal>
                   <TableDetailReal>
-                    {round(authed ? prof.metrics.learning.value : fakeMetric(), 1)}
-                    {authed ? getDifferenceIndicator(round(prof.metrics.learning.difToAverage, 1)) : null}
+                    {round(authed ? prof.metrics['learning amount'].value : fakeMetric(), 1)}
+                    {authed ? getDifferenceIndicator(round(prof.metrics['learning amount'].difToAverage, 1)) : null}
                   </TableDetailReal>
                   <TableDetailReal>
-                    {round(authed ? prof.metrics.challenge.value : fakeMetric(), 1)}
-                    {authed ? getDifferenceIndicator(round(prof.metrics.challenge.difToAverage, 1)) : null}
+                    {round(authed ? prof.metrics.communication.value : fakeMetric(), 1)}
+                    {authed ? getDifferenceIndicator(round(prof.metrics.communication.difToAverage, 1)) : null}
                   </TableDetailReal>
                 </tr>
               ))}

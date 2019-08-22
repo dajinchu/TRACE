@@ -1,5 +1,5 @@
 import React from 'react';
-import FontAwesome from 'react-fontawesome'
+import FontAwesome from 'react-fontawesome';
 import styled from 'styled-components';
 
 const VALUE_OUT_OF = {
@@ -73,24 +73,33 @@ const CourseMetricSubtext = styled.div`
   margin-top: 10px;
 `;
 
-const Metric = ({name, value, valueOutOf}) => {
-  let percentOfCircumfrence = value / valueOutOf;
-  let circumfrence = 2 * RING_RADIUS * 3.14 * (1 - percentOfCircumfrence);
+const Metric = ({ name, value, valueOutOf }) => {
+  const percentOfCircumfrence = value / valueOutOf;
+  const circumfrence = 2 * RING_RADIUS * 3.14 * (1 - percentOfCircumfrence);
   return (
     <CourseMetric>
       <svg width="120" height="120" viewBox="0 0 120 120" style={{ transform: 'rotate(-90deg)' }}>
         <circle cx="60" cy="60" r={`${RING_RADIUS}`} fill="none" stroke="#E6E6E6" strokeWidth="7" />
-        <circle cx="60" cy="60" r={`${RING_RADIUS}`} fill="none" stroke="#A3874A" strokeWidth="7"
-          strokeDasharray={`${2 * 3.14 * RING_RADIUS}`} strokeDashoffset={circumfrence} />
+        <circle
+          cx="60"
+          cy="60"
+          r={`${RING_RADIUS}`}
+          fill="none"
+          stroke="#A3874A"
+          strokeWidth="7"
+          strokeDasharray={`${2 * 3.14 * RING_RADIUS}`}
+          strokeDashoffset={circumfrence}
+        />
       </svg>
       <CourseMetricSubtext>{name}</CourseMetricSubtext>
     </CourseMetric>
   );
 };
 
-const ProfessorItem = ({ name, email, homepage, metrics }) => {
-  const displayMetrics = metrics ? Object.entries(metrics).filter(m => 
-    m[0] === 'workload' || m[0] === 'overall' || m[0] === 'personality')
+const ProfessorItem = ({
+  name, email, homepage, metrics,
+}) => {
+  const displayMetrics = metrics ? Object.entries(metrics).filter(m => m[0] === 'enthusiasm' || m[0] === 'communication' || m[0] === 'challenging')
     : [];
   return (
     <ProfessorItemContainer>
@@ -106,45 +115,48 @@ const ProfessorItem = ({ name, email, homepage, metrics }) => {
         </ProfessorName>
         <ProfessorInfo>
           <a href={`mailto:${email || 'systems@ccs.neu.edu'}`}>
-            <FontAwesome name='reply' style={{
-              marginRight: '10px',
-              color: '#A3874A',
-            }} />
+            <FontAwesome
+              name="reply"
+              style={{
+                marginRight: '10px',
+                color: '#A3874A',
+              }}
+            />
           </a>
           {email || 'systems@ccs.neu.edu'}
         </ProfessorInfo>
         <ProfessorInfo>
           <a href={homepage || 'https://khoury.northeastern.edu'}>
-            <FontAwesome name='globe' style={{
-              marginRight: '10px',
-              width: '14px',
-              color: '#A3874A',
-            }} />
+            <FontAwesome
+              name="globe"
+              style={{
+                marginRight: '10px',
+                width: '14px',
+                color: '#A3874A',
+              }}
+            />
           </a>
           {homepage || 'https://khoury.northeastern.edu'}
         </ProfessorInfo>
       </LeftColumn>
       <RightColumn>
-        {displayMetrics.map(metric => {
-          let [name, value] = metric;
-          if (name === 'personality') {
-            name = 'personability';
-          }
+        {displayMetrics.map((metric) => {
+          const [name, value] = metric;
           return (
             <Metric
               name={name}
               key={name}
               value={value}
-              valueOutOf={name === 'workload'
+              valueOutOf={name === 'hours devoted to course'
                 ? VALUE_OUT_OF.HOURS
                 : VALUE_OUT_OF.STANDARD
               }
             />
-          )
+          );
         })}
       </RightColumn>
     </ProfessorItemContainer>
-  )
+  );
 };
 
 export default ProfessorItem;

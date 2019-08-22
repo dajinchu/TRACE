@@ -15,15 +15,24 @@ def login(username, password):
     driver = webdriver.Firefox()
 
     driver.get("https://www.applyweb.com/eval/shibboleth/neu/36892")
-
+    
+    WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.ID, "username")))
     driver.find_element_by_id("username").send_keys(username)
     driver.find_element_by_id("password").send_keys(password)
-    driver.find_element_by_name("submit").click()
+    driver.find_element_by_name("_eventId_proceed").click()
 
 
     try:
         # Wait for javascript redirect to happen
         WebDriverWait(driver, 5).until(EC.title_contains("My Evaluations"))
+
+        driver.get("https://www.applyweb.com/eval/new/reportbrowser")
+
+        WebDriverWait(driver, 5).until(EC.title_contains("Report Browser - What Do You Think?"))
+
+        print(driver.find_element_by_class_name("content").text)
+
+        #WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, "tr.ng-scope")))
         cookies = dict()
         cookies["sid"] = driver.get_cookie("sid")["value"]
         cookies["sdbid"] = driver.get_cookie("sdbid")["value"]
@@ -34,7 +43,7 @@ def login(username, password):
 
 cookies = {}
 headers = {
-    'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0'
+    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:68.0) Gecko/20100101 Firefox/68.0'
 }
 def auth_get(*args, **kwargs):
     global cookies
