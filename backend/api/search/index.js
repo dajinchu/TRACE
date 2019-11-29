@@ -19,10 +19,6 @@ router.get('/', (req, res) => {
   options = {
     method: 'POST',
     uri: ES_URL,
-    auth: {
-      user: process.env.es_user,
-      pass: process.env.es_pass,
-    },
     body: {
       "size": 20,
       "query": {
