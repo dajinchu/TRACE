@@ -16,6 +16,12 @@
         "memory": 128
       },
       {
+        "name": "frontend",
+        "image": "151114962295.dkr.ecr.us-east-1.amazonaws.com/tracedemo-frontend",
+        "essential": true,
+        "memory": 128
+      },
+      {
         "name": "nginx-proxy",
         "image": "nginx",
         "essential": true,
@@ -27,7 +33,8 @@
           }
         ],
         "links": [
-          "backend"
+          "backend",
+          "frontend"
         ],
         "mountPoints": [
           {
