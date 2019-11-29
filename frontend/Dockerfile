@@ -1,14 +1,13 @@
-FROM node:8.11-alpine
-
-# Create a work directory and copy over our dependency manifest files.
-WORKDIR /usr/src/app
-
-COPY package.json /usr/src/app/package.json
-COPY yarn.lock /usr/src/app/yarn.lock
-COPY /src /usr/src/app/src
-
-
+# build environment
+FROM node:11-alpine as build
+WORKDIR /app
+COPY package.json /app/package.json
 RUN yarn
+COPY . /app
+RUN yarn build
 
-# Expose PORT 3000 on our virtual machine so we can run our server
-EXPOSE 3000
+# production environment
+FROM nginx:1.16.0-alpine
+COPY --from=build /app/build /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]

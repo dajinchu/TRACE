@@ -6,6 +6,8 @@ const router = express.Router();
 router.use(jwtCheck);
 module.exports = router;
 
+const ES_URL = process.env.es_url || "localhost:9200";
+
 router.get('/', (req, res) => {
   console.log("search request");
   console.time("respond");
@@ -16,7 +18,7 @@ router.get('/', (req, res) => {
   }
   options = {
     method: 'POST',
-    uri: 'https://trace.sandboxneu.com/courses,profs/_search',
+    uri: ES_URL,
     auth: {
       user: process.env.es_user,
       pass: process.env.es_pass,
