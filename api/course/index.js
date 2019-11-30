@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors')
 const request = require('request-promise-native');
-const jwtCheck = require('../auth.js');
+const jwtCheck = require('../auth.js.js');
 const router = express.Router();
 
 router.use(jwtCheck);
