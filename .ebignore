@@ -1,0 +1,11 @@
+# Ignore source folders as these will be built and published to ECR and accessed via remote image.
+api/*
+frontend/*
+scraper/*
+# Note that we need proxy folder
+
+LICENSE
+.env.example
+.gitignore
+.ebignore
+.elasticbeanstalk/*
