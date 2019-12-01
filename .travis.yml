@@ -21,3 +21,5 @@ deploy:
     env: "Tracedemo-env-2"
     bucket: "elasticbeanstalk-us-east-1-151114962295"
     edge: true
+    on:
+      branch: docker
