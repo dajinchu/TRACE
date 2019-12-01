@@ -4,6 +4,10 @@ env:
 - APP_NAME=tracedemo-frontend AWS_ACCOUNT=151114962295
 services:
 - docker
+install:
+  - echo "install nothing!"
+script:
+  - echo "no tests!"
 after_success:
 - docker --version
 - pip install --user awscli
