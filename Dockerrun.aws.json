@@ -33,7 +33,7 @@
           }
         ],
         "links": [
-          "backend",
+          "api",
           "frontend"
         ],
         "mountPoints": [
