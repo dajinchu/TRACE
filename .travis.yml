@@ -1,25 +1,31 @@
 sudo: required
 language: node_js
 env:
-- APP_NAME=tracedemo-frontend AWS_ACCOUNT=151114962295
+- AWS_ACCOUNT=151114962295
 services:
 - docker
 install:
   - echo "install nothing!"
 script:
   - echo "no tests!"
-after_success:
-- docker --version
-- pip install --user awscli
-- export PATH=$PATH:$HOME/.local/bin
-- eval $(aws ecr get-login --no-include-email --region us-east-1)
-deploy:
-  - provider: elasticbeanstalk
-    access_key_id: $AWS_ACCESS_KEY_ID
-    secret_access_key: $AWS_SECRET_ACCESS_KEY
-    app: "tracedemo"
-    env: "Tracedemo-env-2"
-    bucket: "elasticbeanstalk-us-east-1-151114962295"
-    edge: true
-    on:
-      branch: docker
+jobs:
+  include:
+    - stage: publish_containers
+      deploy:
+        provider: script
+        script: bash travs/deploy_ecr.sh tracedemo-frontend
+    - # continue publish_conatienrs
+      deploy:
+        provider: script
+        script: bash travs/deploy_ecr.sh tracedemo-backend
+    - stage: deploy
+      deploy:
+        provider: elasticbeanstalk
+        access_key_id: $AWS_ACCESS_KEY_ID
+        secret_access_key: $AWS_SECRET_ACCESS_KEY
+        app: "tracedemo"
+        env: "Tracedemo-env-2"
+        bucket: "elasticbeanstalk-us-east-1-151114962295"
+        edge: true
+        on:
+          branch: docker
