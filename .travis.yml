@@ -1,9 +1,5 @@
 sudo: required
 language: node_js
-env:
-- AWS_ACCOUNT=151114962295
-services:
-- docker
 install:
   - echo "install nothing!"
 script:
@@ -13,12 +9,14 @@ jobs:
     - stage: publish_containers
       deploy:
         provider: script
+        services: docker
         script: bash travis/deploy_ecr.sh frontend
         on:
           branch: docker
     - # continue publish_conatienrs
       deploy:
         provider: script
+        services: docker
         script: bash travis/deploy_ecr.sh api
         on:
           branch: docker
@@ -30,6 +28,7 @@ jobs:
         app: "tracedemo"
         env: "Tracedemo-env-2"
         bucket: "elasticbeanstalk-us-east-1-151114962295"
+        wait_until_deployed: true
         edge: true
         on:
           branch: docker
