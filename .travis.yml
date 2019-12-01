@@ -11,15 +11,17 @@ script:
 jobs:
   include:
     - stage: publish_containers
+      before_deploy: cd frontend
       deploy:
         provider: script
-        script: bash travs/deploy_ecr.sh tracedemo-frontend
+        script: bash travis/deploy_ecr.sh tracedemo-frontend
         on:
           branch: docker
     - # continue publish_conatienrs
+      before_deploy: cd backend
       deploy:
         provider: script
-        script: bash travs/deploy_ecr.sh tracedemo-backend
+        script: bash travis/deploy_ecr.sh tracedemo-backend
         on:
           branch: docker
     - stage: deploy
