@@ -1,8 +1,7 @@
 sudo: required
-language: nodejs
+language: node_js
 env:
-- APP_NAME=my_example_app
-- AWS_ECR_ACCOUNT=09500000000
+- APP_NAME=tracedemo-frontend AWS_ACCOUNT=151114962295
 services:
 - docker
 after_success:
