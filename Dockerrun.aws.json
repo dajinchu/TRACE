@@ -10,8 +10,8 @@
     ],
     "containerDefinitions": [
       {
-        "name": "backend",
-        "image": "151114962295.dkr.ecr.us-east-1.amazonaws.com/tracedemo-backend",
+        "name": "api",
+        "image": "151114962295.dkr.ecr.us-east-1.amazonaws.com/tracedemo-api",
         "essential": true,
         "memory": 128
       },

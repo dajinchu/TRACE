@@ -19,7 +19,7 @@ jobs:
     - # continue publish_conatienrs
       deploy:
         provider: script
-        script: bash travis/deploy_ecr.sh backend
+        script: bash travis/deploy_ecr.sh api
         on:
           branch: docker
     - stage: deploy
