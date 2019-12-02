@@ -11,15 +11,11 @@ jobs:
         provider: script
         services: docker
         script: bash travis/deploy_ecr.sh frontend
-        on:
-          branch: docker
     - # continue publish_conatienrs
       deploy:
         provider: script
         services: docker
         script: bash travis/deploy_ecr.sh api
-        on:
-          branch: docker
     - stage: deploy
       deploy:
         provider: elasticbeanstalk
@@ -29,5 +25,3 @@ jobs:
         env: "Tracedemo-env-2"
         bucket: "elasticbeanstalk-us-east-1-151114962295"
         edge: true
-        on:
-          branch: docker
